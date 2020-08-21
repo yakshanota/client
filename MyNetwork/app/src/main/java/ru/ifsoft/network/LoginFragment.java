@@ -426,20 +426,20 @@ public class LoginFragment extends Fragment implements Constants {
             return false;
         }
 
-        if (username.length() < 5) {
+        if (username.length() < 10) {
 
             signinUsername.setError(getString(R.string.error_small_username));
 
             return false;
         }
 
-        if (!helper.isValidLogin(username) && !helper.isValidEmail(username)) {
+        /*if (!helper.isValidLogin(username) && !helper.isValidEmail(username)) {
 
             signinUsername.setError(getString(R.string.error_wrong_format));
 
-            return false;
+        return false;
         }
-
+*/
         return  true;
     }
 

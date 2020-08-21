@@ -39,7 +39,7 @@ public interface Constants {
 
     // Client ID For identify the application | Must be the same with CLIENT_ID from server config: db.inc.php
 
-    public static final String CLIENT_ID = "9334";  // Correct example: 12567 | Incorrect example: 0987
+    public static final String CLIENT_ID = "9443";  // Correct example: 12567 | Incorrect example: 0987
 
     public static final String API_DOMAIN = "http://yakshanota.com/";  // url address to which the application sends requests || 10.0.2.2
 
