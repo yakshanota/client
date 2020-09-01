@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.view.Display;
 
 import java.security.SecureRandom;
@@ -77,6 +78,18 @@ public class Helper extends Application {
 
     		return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     	}
+    }
+
+    public boolean isValidPhone(String phone) {
+
+        if (TextUtils.isEmpty(phone)) {
+
+            return false;
+
+        } else {
+
+            return Patterns.PHONE.matcher(phone).matches();
+        }
     }
     
     public boolean isValidLogin(String login) {

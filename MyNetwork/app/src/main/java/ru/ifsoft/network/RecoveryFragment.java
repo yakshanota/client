@@ -79,7 +79,7 @@ public class RecoveryFragment extends Fragment implements Constants {
 
                     Helper helper = new Helper();
 
-                    if (helper.isValidEmail(email)) {
+                    if (helper.isValidPhone(email)) {
 
                         recovery();
 
@@ -184,7 +184,7 @@ public class RecoveryFragment extends Fragment implements Constants {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("clientId", CLIENT_ID);
-                params.put("email", email);
+                params.put("phone", email);
 
                 return params;
             }

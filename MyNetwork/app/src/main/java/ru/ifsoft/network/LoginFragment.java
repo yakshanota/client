@@ -84,7 +84,7 @@ public class LoginFragment extends Fragment implements Constants {
         loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
         loginButton.setPermissions("public_profile");
 
-        loginButton.setVisibility(View.VISIBLE);
+        loginButton.setVisibility(View.GONE);
 
         // Registering CallbackManager with the LoginButton
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -142,7 +142,6 @@ public class LoginFragment extends Fragment implements Constants {
                     Toast.makeText(getActivity(), R.string.msg_network_error, Toast.LENGTH_SHORT).show();
 
                 } else if (!checkUsername() || !checkPassword()) {
-
 
                 } else {
 
@@ -342,6 +341,7 @@ public class LoginFragment extends Fragment implements Constants {
 
         showpDialog();
 
+        String fcm = App.getInstance().getGcmToken();
         CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_ACCOUNT_LOGIN, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -426,20 +426,20 @@ public class LoginFragment extends Fragment implements Constants {
             return false;
         }
 
-        if (username.length() < 10) {
+        if (username.length() < 5) {
 
             signinUsername.setError(getString(R.string.error_small_username));
 
             return false;
         }
 
-        /*if (!helper.isValidLogin(username) && !helper.isValidEmail(username)) {
+        if (!helper.isValidLogin(username) && !helper.isValidPhone(username)) {
 
             signinUsername.setError(getString(R.string.error_wrong_format));
 
-        return false;
+            return false;
         }
-*/
+
         return  true;
     }
 

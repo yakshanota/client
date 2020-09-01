@@ -18,14 +18,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -44,6 +48,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,7 +123,7 @@ public class RegisterActivity extends ActivityBase {
 
     // Screen 0
 
-    private EditText mUsername, mFullname, mPassword, mEmail, mReferrer;
+    private EditText mUsername, mFullname, mPassword;
     private LinearLayout mFacebookAuthContainer;
 
     private TextView mButtonRegularAuth, mButtonTerms;
@@ -153,12 +158,14 @@ public class RegisterActivity extends ActivityBase {
 
     CallbackManager callbackManager;
 
+    private Boolean img_status = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        if (AccessToken.getCurrentAccessToken()!= null) LoginManager.getInstance().logOut();
+        if (AccessToken.getCurrentAccessToken() != null) LoginManager.getInstance().logOut();
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -205,11 +212,10 @@ public class RegisterActivity extends ActivityBase {
 
         screens = new int[]{
                 R.layout.register_screen_1,
-                R.layout.register_screen_2,
                 R.layout.register_screen_3,
-                R.layout.register_screen_4};
+                R.layout.register_screen_2};
 
-        addMarkers(0);
+       addMarkers(0);
 
         myViewPagerAdapter = new MyViewPagerAdapter();
         mViewPager.setAdapter(myViewPagerAdapter);
@@ -239,7 +245,7 @@ public class RegisterActivity extends ActivityBase {
 
                     switch (current) {
 
-                        case 1: {
+                        case 2: {
 
                             if (selectedPhotoImg.length() != 0) {
 
@@ -252,22 +258,10 @@ public class RegisterActivity extends ActivityBase {
                             }
 
                             break;
+
                         }
 
-                        case 2: {
-
-                            if (gender > 0 && age > 17) {
-
-                                mViewPager.setCurrentItem(current + 1);
-
-                            } else {
-
-                                Toast.makeText(RegisterActivity.this, getString(R.string.register_screen_3_msg), Toast.LENGTH_SHORT).show();
-                                animateIcon(mImage);
-                            }
-
-                            break;
-                        }
+                        case 1:
 
                         default: {
 
@@ -337,12 +331,6 @@ public class RegisterActivity extends ActivityBase {
                     mPassword.setText(password);
                 }
 
-                if (email.length() != 0) {
-
-                    mEmail.setText(email);
-                }
-
-                mReferrer.setText(referrer);
 
                 if (!FACEBOOK_AUTHORIZATION) {
 
@@ -353,13 +341,13 @@ public class RegisterActivity extends ActivityBase {
 
                     if (facebook_id.length() != 0) {
 
-                        mFacebookAuthContainer.setVisibility(View.VISIBLE);
+                        mFacebookAuthContainer.setVisibility(View.GONE);
                         mFacebookAuth.setVisibility(View.GONE);
 
                     } else {
 
                         mFacebookAuthContainer.setVisibility(View.GONE);
-                        mFacebookAuth.setVisibility(View.VISIBLE);
+                        mFacebookAuth.setVisibility(View.GONE);
                     }
                 }
 
@@ -368,42 +356,12 @@ public class RegisterActivity extends ActivityBase {
 
             case 2: {
 
-                if (age != 0) {
-
-                    mButtonChooseAge.setText(getString(R.string.action_choose_age) + ": " + Integer.toString(age));
-
-                } else {
-
-                    mButtonChooseAge.setText(getString(R.string.action_choose_age));
-                }
-
-                if (gender == 0) {
-
-                    mButtonChooseGender.setText(getString(R.string.action_choose_gender));
-
-                } else {
-
-                    mButtonChooseGender.setText(getString(R.string.action_choose_gender) + ": " + Helper.getGenderTitle(this, gender));
-                }
+                mButtonBack.setTextColor(getResources().getColor(R.color.black));
+                mButtonFinish.setTextColor(getResources().getColor(R.color.black));
 
                 break;
             }
 
-            case 3: {
-
-                if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                    mButtonGrantLocationPermission.setEnabled(false);
-                    mButtonGrantLocationPermission.setText(R.string.action_grant_access_success);
-
-                } else {
-
-                    mButtonGrantLocationPermission.setEnabled(true);
-                    mButtonGrantLocationPermission.setText(R.string.action_grant_access);
-                }
-
-                break;
-            }
 
             default: {
 
@@ -430,13 +388,14 @@ public class RegisterActivity extends ActivityBase {
                 if (save(selectedPhotoImg, "photo.jpg")) {
 
                     selectedPhotoImg = Environment.getExternalStorageDirectory() + File.separator + APP_TEMP_FOLDER + File.separator + "photo.jpg";
-
+                    img_status = true;
                     mPhoto.setImageURI(null);
                     mPhoto.setImageURI(FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(selectedPhotoImg)));
 
                 } else {
 
                     mPhoto.setImageURI(null);
+                    img_status = false;
                     mPhoto.setImageResource(R.drawable.profile_default_photo);
                     selectedPhotoImg = "";
                 }
@@ -444,6 +403,7 @@ public class RegisterActivity extends ActivityBase {
             } catch (Exception e) {
 
                 mPhoto.setImageURI(null);
+                img_status = false;
                 mPhoto.setImageResource(R.drawable.profile_default_photo);
                 selectedPhotoImg = "";
 
@@ -457,7 +417,7 @@ public class RegisterActivity extends ActivityBase {
                 selectedPhotoImg = Environment.getExternalStorageDirectory() + File.separator + APP_TEMP_FOLDER + File.separator + "photo.jpg";
 
                 save(selectedPhotoImg, "photo.jpg");
-
+                img_status = true;
                 mPhoto.setImageURI(null);
                 mPhoto.setImageURI(FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", new File(selectedPhotoImg)));
 
@@ -468,7 +428,7 @@ public class RegisterActivity extends ActivityBase {
                 mPhoto.setImageURI(null);
                 mPhoto.setImageResource(R.drawable.profile_default_photo);
                 selectedPhotoImg = "";
-
+                img_status = false;
                 Log.v("OnCameraCallBack", ex.getMessage());
             }
 
@@ -584,7 +544,7 @@ public class RegisterActivity extends ActivityBase {
 
     public void showNoStoragePermissionSnackbar() {
 
-        Snackbar.make(findViewById(android.R.id.content), getString(R.string.label_no_storage_permission) , Snackbar.LENGTH_LONG).setAction(getString(R.string.action_settings), new View.OnClickListener() {
+        Snackbar.make(findViewById(android.R.id.content), getString(R.string.label_no_storage_permission), Snackbar.LENGTH_LONG).setAction(getString(R.string.action_settings), new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -599,7 +559,7 @@ public class RegisterActivity extends ActivityBase {
 
     public void showNoLocationPermissionSnackbar() {
 
-        Snackbar.make(findViewById(android.R.id.content), getString(R.string.label_no_location_permission) , Snackbar.LENGTH_LONG).setAction(getString(R.string.action_settings), new View.OnClickListener() {
+        Snackbar.make(findViewById(android.R.id.content), getString(R.string.label_no_location_permission), Snackbar.LENGTH_LONG).setAction(getString(R.string.action_settings), new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -627,7 +587,7 @@ public class RegisterActivity extends ActivityBase {
 
         int scaleFactor = 1;
 
-        scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
@@ -769,13 +729,6 @@ public class RegisterActivity extends ActivityBase {
                     break;
                 }
 
-                case 3: {
-
-                    window.setStatusBarColor(getColorWrapper(act, R.color.register_screen_4));
-
-                    break;
-                }
-
                 default: {
 
                     window.setStatusBarColor(Color.TRANSPARENT);
@@ -803,7 +756,7 @@ public class RegisterActivity extends ActivityBase {
 
         if (markers.length > 0)
 
-            markers[currentPage].setTextColor(getResources().getColor(R.color.white));
+            markers[currentPage].setTextColor(getResources().getColor(R.color.clr_FF9800));
     }
 
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -845,12 +798,6 @@ public class RegisterActivity extends ActivityBase {
                     break;
                 }
 
-                case 3: {
-
-                    setStatusBarColor(RegisterActivity.this, 3);
-
-                    break;
-                }
 
                 default: {
 
@@ -894,8 +841,7 @@ public class RegisterActivity extends ActivityBase {
                     mUsername = (EditText) view.findViewById(R.id.username_edit);
                     mFullname = (EditText) view.findViewById(R.id.fullname_edit);
                     mPassword = (EditText) view.findViewById(R.id.password_edit);
-                    mEmail = (EditText) view.findViewById(R.id.email_edit);
-                    mReferrer = (EditText) view.findViewById(R.id.referrer_edit);
+
 
                     mFacebookAuthContainer = (LinearLayout) view.findViewById(R.id.facebook_auth_container);
 
@@ -918,6 +864,7 @@ public class RegisterActivity extends ActivityBase {
                         public void onCancel() {
 
                         }
+
                         @Override
                         public void onError(FacebookException error) {
 
@@ -1023,9 +970,11 @@ public class RegisterActivity extends ActivityBase {
                             check_fullname();
                         }
 
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
 
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
                     });
 
                     mPassword.addTextChangedListener(new TextWatcher() {
@@ -1035,57 +984,6 @@ public class RegisterActivity extends ActivityBase {
                             check_password();
                         }
 
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-                    });
-
-                    mEmail.addTextChangedListener(new TextWatcher() {
-
-                        public void afterTextChanged(Editable s) {
-
-                            if (App.getInstance().isConnected() && check_email()) {
-
-                                CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_APP_CHECK_EMAIL, null,
-                                        new Response.Listener<JSONObject>() {
-                                            @Override
-                                            public void onResponse(JSONObject response) {
-
-                                                try {
-
-                                                    if (response.getBoolean("error")) {
-
-                                                        mEmail.setError(getString(R.string.error_email_taken));
-                                                    }
-
-                                                } catch (JSONException e) {
-
-                                                    e.printStackTrace();
-
-                                                }
-                                            }
-                                        }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-
-                                        Log.e("Email()", error.toString());
-
-                                    }
-                                }) {
-
-                                    @Override
-                                    protected Map<String, String> getParams() {
-                                        Map<String, String> params = new HashMap<String, String>();
-                                        params.put("email", email);
-
-                                        return params;
-                                    }
-                                };
-
-                                App.getInstance().addToRequestQueue(jsonReq);
-                            }
-                        }
-
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                         }
 
@@ -1093,10 +991,40 @@ public class RegisterActivity extends ActivityBase {
                         }
                     });
 
+
                     break;
                 }
 
                 case 1: {
+                    mButtonBack.setTextColor(getResources().getColor(R.color.black));
+                    mButtonFinish.setTextColor(getResources().getColor(R.color.black));
+                    RadioGroup rad = view.findViewById(R.id.rg5);
+                    Button button_choose_group = view.findViewById(R.id.button_choose_group);
+                    button_choose_group.setVisibility(View.GONE);
+                    rad.setOnCheckedChangeListener((group, checkedId) -> {
+                        int id = rad.getCheckedRadioButtonId();
+                        View radioButton = rad.findViewById(id);
+                        if (radioButton.getId() == R.id.rg5r1) {
+                            button_choose_group.setVisibility(View.GONE);
+                            gender = 0;
+                        } else {
+                            button_choose_group.setVisibility(View.GONE);
+                            gender = 1;
+                        }
+                    });
+
+                    button_choose_group.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            choiceAge();
+                        }
+                    });
+
+                    break;
+                }
+
+                case 2: {
+
 
                     mPhoto = (CircularImageView) view.findViewById(R.id.photo_image);
 
@@ -1117,49 +1045,9 @@ public class RegisterActivity extends ActivityBase {
                     });
 
                     break;
+
                 }
 
-                case 2: {
-
-                    mImage = (ImageView) view.findViewById(R.id.image);
-
-                    mButtonChooseGender = (Button) view.findViewById(R.id.button_choose_gender);
-                    mButtonChooseAge = (Button) view.findViewById(R.id.button_choose_age);
-
-                    mButtonChooseGender.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-
-                            choiceGender();
-                        }
-                    });
-
-                    mButtonChooseAge.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-
-                            choiceAge();
-                        }
-                    });
-
-                    break;
-                }
-
-                case 3: {
-
-                    mImage = (ImageView) view.findViewById(R.id.image);
-                    mButtonGrantLocationPermission = (Button) view.findViewById(R.id.button_grant_location_permission);
-
-                    mButtonGrantLocationPermission.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            grantLocationPermission();
-                        }
-                    });
-                }
             }
 
             updateView();
@@ -1208,7 +1096,7 @@ public class RegisterActivity extends ActivityBase {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 
         finish();
     }
@@ -1252,7 +1140,8 @@ public class RegisterActivity extends ActivityBase {
 
                 } finally {
 
-                    if (AccessToken.getCurrentAccessToken() != null) LoginManager.getInstance().logOut();
+                    if (AccessToken.getCurrentAccessToken() != null)
+                        LoginManager.getInstance().logOut();
 
                     if (!facebook_id.equals("")) {
 
@@ -1303,7 +1192,7 @@ public class RegisterActivity extends ActivityBase {
 
                                 mFacebookAuth.setVisibility(View.GONE);
 
-                                mFacebookAuthContainer.setVisibility(View.VISIBLE);
+                                mFacebookAuthContainer.setVisibility(View.GONE);
 
                                 updateView();
                             }
@@ -1508,7 +1397,7 @@ public class RegisterActivity extends ActivityBase {
 
         if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
 
@@ -1543,13 +1432,11 @@ public class RegisterActivity extends ActivityBase {
         username = mUsername.getText().toString();
         fullname = mFullname.getText().toString();
         password = mPassword.getText().toString();
-        email = mEmail.getText().toString();
-        referrer = mReferrer.getText().toString();
+
 
         mUsername.setError(null);
         mFullname.setError(null);
         mPassword.setError(null);
-        mEmail.setError(null);
 
         Helper helper = new Helper();
 
@@ -1567,7 +1454,7 @@ public class RegisterActivity extends ActivityBase {
             return false;
         }
 
-        if (!helper.isValidLogin(username)) {
+        if (!helper.isValidPhone(username)) {
 
             mUsername.setError(getString(R.string.error_wrong_format));
 
@@ -1609,19 +1496,6 @@ public class RegisterActivity extends ActivityBase {
             return false;
         }
 
-        if (email.length() == 0) {
-
-            mEmail.setError(getString(R.string.error_field_empty));
-
-            return false;
-        }
-
-        if (!helper.isValidEmail(email)) {
-
-            mEmail.setError(getString(R.string.error_wrong_format));
-
-            return false;
-        }
 
         return true;
     }
@@ -1646,7 +1520,7 @@ public class RegisterActivity extends ActivityBase {
             return false;
         }
 
-        if (!helper.isValidLogin(username)) {
+        if (!helper.isValidPhone(username)) {
 
             mUsername.setError(getString(R.string.error_wrong_format));
 
@@ -1655,7 +1529,7 @@ public class RegisterActivity extends ActivityBase {
 
         mUsername.setError(null);
 
-        return  true;
+        return true;
     }
 
     public Boolean check_fullname() {
@@ -1678,7 +1552,7 @@ public class RegisterActivity extends ActivityBase {
 
         mFullname.setError(null);
 
-        return  true;
+        return true;
     }
 
     public Boolean check_password() {
@@ -1713,30 +1587,6 @@ public class RegisterActivity extends ActivityBase {
         return true;
     }
 
-    public Boolean check_email() {
-
-        email = mEmail.getText().toString();
-
-        Helper helper = new Helper();
-
-        if (email.length() == 0) {
-
-            mEmail.setError(getString(R.string.error_field_empty));
-
-            return false;
-        }
-
-        if (!helper.isValidEmail(email)) {
-
-            mEmail.setError(getString(R.string.error_wrong_format));
-
-            return false;
-        }
-
-        mEmail.setError(null);
-
-        return true;
-    }
 
     private void hideKeyboard() {
 
@@ -1766,78 +1616,83 @@ public class RegisterActivity extends ActivityBase {
 
                             // Upload profile photo
 
-                            File file = new File(Environment.getExternalStorageDirectory() + File.separator + APP_TEMP_FOLDER, "photo.jpg");
+                            if (img_status) {
 
-                            final OkHttpClient client = new OkHttpClient();
+                                File file = new File(Environment.getExternalStorageDirectory() + File.separator + APP_TEMP_FOLDER, "photo.jpg");
 
-                            client.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
+                                final OkHttpClient client = new OkHttpClient();
 
-                            try {
+                                client.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
 
-                                RequestBody requestBody = new MultipartBuilder()
-                                        .type(MultipartBuilder.FORM)
-                                        .addFormDataPart("uploaded_file", file.getName(), RequestBody.create(MediaType.parse("text/csv"), file))
-                                        .addFormDataPart("accountId", Long.toString(App.getInstance().getId()))
-                                        .addFormDataPart("accessToken", App.getInstance().getAccessToken())
-                                        .addFormDataPart("imgType", Integer.toString(UPLOAD_TYPE_PHOTO))
-                                        .build();
+                                try {
 
-                                com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
-                                        .url(METHOD_PROFILE_UPLOAD_IMAGE)
-                                        .addHeader("Accept", "application/json;")
-                                        .post(requestBody)
-                                        .build();
+                                    RequestBody requestBody = new MultipartBuilder()
+                                            .type(MultipartBuilder.FORM)
+                                            .addFormDataPart("uploaded_file", file.getName(), RequestBody.create(MediaType.parse("text/csv"), file))
+                                            .addFormDataPart("accountId", Long.toString(App.getInstance().getId()))
+                                            .addFormDataPart("accessToken", App.getInstance().getAccessToken())
+                                            .addFormDataPart("imgType", Integer.toString(UPLOAD_TYPE_PHOTO))
+                                            .build();
 
-                                client.newCall(request).enqueue(new Callback() {
+                                    com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+                                            .url(METHOD_PROFILE_UPLOAD_IMAGE)
+                                            .addHeader("Accept", "application/json;")
+                                            .post(requestBody)
+                                            .build();
 
-                                    @Override
-                                    public void onFailure(com.squareup.okhttp.Request request, IOException e) {
+                                    client.newCall(request).enqueue(new Callback() {
 
-                                        go();
-
-                                        Log.e("failure", request.toString());
-                                    }
-
-                                    @Override
-                                    public void onResponse(com.squareup.okhttp.Response response) throws IOException {
-
-                                        String jsonData = response.body().string();
-
-                                        Log.e("response", jsonData);
-
-                                        try {
-
-                                            JSONObject result = new JSONObject(jsonData);
-
-                                            if (!result.getBoolean("error")) {
-
-                                                if (result.has("lowPhotoUrl")) {
-
-                                                    App.getInstance().setPhotoUrl(result.getString("lowPhotoUrl"));
-                                                }
-
-                                                if (result.has("moderateImgUrl")) {
-
-                                                    App.getInstance().setPhotoUrl(result.getString("moderateImgUrl"));
-                                                }
-                                            }
-
-                                            Log.d("My App", response.toString());
-
-                                        } catch (Throwable t) {
-
-                                            Log.e("My App", "Could not parse malformed JSON: \"" + t.getMessage() + "\"");
-
-                                        } finally {
+                                        @Override
+                                        public void onFailure(com.squareup.okhttp.Request request, IOException e) {
 
                                             go();
+
+                                            Log.e("failure", request.toString());
                                         }
-                                    }
-                                });
 
-                            } catch (Exception ex) {
-                                // Handle the error
+                                        @Override
+                                        public void onResponse(com.squareup.okhttp.Response response) throws IOException {
 
+                                            String jsonData = response.body().string();
+
+                                            Log.e("response", jsonData);
+
+                                            try {
+
+                                                JSONObject result = new JSONObject(jsonData);
+
+                                                if (!result.getBoolean("error")) {
+
+                                                    if (result.has("lowPhotoUrl")) {
+
+                                                        App.getInstance().setPhotoUrl(result.getString("lowPhotoUrl"));
+                                                    }
+
+                                                    if (result.has("moderateImgUrl")) {
+
+                                                        App.getInstance().setPhotoUrl(result.getString("moderateImgUrl"));
+                                                    }
+                                                }
+
+                                                Log.d("My App", response.toString());
+
+                                            } catch (Throwable t) {
+
+                                                Log.e("My App", "Could not parse malformed JSON: \"" + t.getMessage() + "\"");
+
+                                            } finally {
+
+                                                go();
+                                            }
+                                        }
+                                    });
+
+                                } catch (Exception ex) {
+                                    // Handle the error
+
+                                    go();
+                                }
+                            } else {
                                 go();
                             }
 
@@ -1847,7 +1702,7 @@ public class RegisterActivity extends ActivityBase {
 
                             switch (App.getInstance().getErrorCode()) {
 
-                                case 300 : {
+                                case 300: {
 
                                     mViewPager.setCurrentItem(0);
 
@@ -1856,7 +1711,7 @@ public class RegisterActivity extends ActivityBase {
                                     break;
                                 }
 
-                                case 301 : {
+                                case 301: {
 
                                     mViewPager.setCurrentItem(0);
 
@@ -1865,7 +1720,7 @@ public class RegisterActivity extends ActivityBase {
                                     break;
                                 }
 
-                                case 500 : {
+                                case 500: {
 
                                     Toast.makeText(RegisterActivity.this, getString(R.string.label_multi_account_msg), Toast.LENGTH_SHORT).show();
 

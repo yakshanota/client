@@ -102,7 +102,7 @@
     <string name="label_sex_female">Gender Female</string>
 
     <string name="placeholder_password">Password</string>
-    <string name="placeholder_login">Mobile Number</string>
+    <string name="placeholder_login">Username</string>
     <string name="placeholder_fullname">Fullname</string>
     <string name="placeholder_location">Location</string>
     <string name="placeholder_facebook_page">Facebook page</string>
@@ -902,5 +902,6 @@
     <!-- For version 5.2 -->
 
     <string name="msg_play_video_error">Unable to play video. File not found.</string>
+    <string name="place_holder_mobile_no">Mobile No</string>
 
 </resources>

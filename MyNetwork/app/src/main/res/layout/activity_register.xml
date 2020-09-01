@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/clr_FF9800"
             local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             local:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 

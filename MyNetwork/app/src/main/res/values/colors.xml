@@ -124,5 +124,6 @@
     <!--    For version 5.0-->
 
     <color name="active_like">#C24537</color>
+    <color name="clr_FF9800">#E7961F</color>
 
 </resources>
