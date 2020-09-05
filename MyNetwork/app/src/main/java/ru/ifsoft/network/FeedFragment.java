@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.android.volley.RetryPolicy;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import androidx.fragment.app.Fragment;
@@ -36,12 +38,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.google.android.material.tabs.TabLayout;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.json.JSONArray;
@@ -52,10 +56,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import androidx.viewpager.widget.ViewPager;
 import ru.ifsoft.network.adapter.AdvancedItemListAdapter;
+import ru.ifsoft.network.adapter.SliderAdapter;
 import ru.ifsoft.network.app.App;
 import ru.ifsoft.network.constants.Constants;
+import ru.ifsoft.network.model.GalleryItem;
 import ru.ifsoft.network.model.Item;
 import ru.ifsoft.network.util.Api;
 import ru.ifsoft.network.util.CustomRequest;
@@ -85,6 +94,7 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
     private SwipeRefreshLayout mItemsContainer;
 
     private ArrayList<Item> itemsList;
+    private ArrayList<GalleryItem> itemsGalleryList;
     private AdvancedItemListAdapter itemsAdapter;
 
     private int itemId = 0;
@@ -93,6 +103,9 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
     private Boolean viewMore = false;
     private Boolean restore = false;
     private Boolean loaded = false;
+
+    private ViewPager v_flipper;
+    private TabLayout indicator;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -139,6 +152,9 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
         mMessage = (TextView) rootView.findViewById(R.id.message);
         mSplash = (ImageView) rootView.findViewById(R.id.splash);
 
+        v_flipper = (ViewPager) rootView.findViewById(R.id.v_viewflipper);
+        indicator = (TabLayout) rootView.findViewById(R.id.indicator);
+
         mDesc.setVisibility(View.GONE);
 
         // Prepare bottom sheet
@@ -170,7 +186,10 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
         updateProfileInfo();
 
-        //
+        // Slide view
+        itemsGalleryList = new ArrayList<>();
+        getGalleryItems();
+
 
         mNestedView = (NestedScrollView) rootView.findViewById(R.id.nested_view);
 
@@ -260,6 +279,7 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
             hideMessage();
         }
+
 
         return rootView;
     }
@@ -937,4 +957,119 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
     public void onDetach() {
         super.onDetach();
     }
+
+    public void getGalleryItems() {
+
+        mItemsContainer.setRefreshing(true);
+
+        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_GALLERY_GET, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (!isAdded() || getActivity() == null) {
+
+                            Log.e("ERROR", "GalleryFragment Not Added to Activity");
+
+                            return;
+                        }
+
+
+                        try {
+
+
+
+                            if (!response.getBoolean("error")) {
+
+                                itemId = response.getInt("itemId");
+
+                                if (response.has("items")) {
+
+                                    JSONArray itemsArray = response.getJSONArray("items");
+
+                                    arrayLength = itemsArray.length();
+
+
+
+                                    if (arrayLength > 0) {
+
+                                        for (int i = 0; i < itemsArray.length(); i++) {
+
+                                            JSONObject itemObj = (JSONObject) itemsArray.get(i);
+
+                                            GalleryItem item = new GalleryItem(itemObj);
+
+                                            itemsGalleryList.add(item);
+                                        }
+                                    }
+                                }
+                            }
+
+                        } catch (JSONException e) {
+
+                            e.printStackTrace();
+
+                        } finally {
+
+                            Log.d("Gallery Response", response.toString());
+                            v_flipper.setAdapter(new SliderAdapter(getActivity(), itemsGalleryList ));
+                            indicator.setupWithViewPager(v_flipper, true);
+
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (!isAdded() || getActivity() == null) {
+
+                    Log.e("ERROR", "GalleryFragment Not Added to Activity");
+
+                    return;
+                }
+
+                Log.e("Gallery Error", error.toString());
+
+                loadingComplete();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("accountId", Long.toString(App.getInstance().getId()));
+                params.put("accessToken", App.getInstance().getAccessToken());
+                params.put("profileId", Long.toString(App.getInstance().getId()));
+                params.put("itemId", Integer.toString(itemId));
+                params.put("language", "en");
+
+                return params;
+            }
+        };
+
+        jsonReq.setRetryPolicy(new RetryPolicy() {
+
+            @Override
+            public int getCurrentTimeout() {
+
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+
+        App.getInstance().addToRequestQueue(jsonReq);
+    }
+
+
 }

@@ -1423,7 +1423,7 @@ public class RegisterActivity extends ActivityBase {
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("signup", true);
-        intent.putExtra("pageId", 2); // 2 = profile page
+        intent.putExtra("pageId", 0); // 2 = profile page
         startActivity(intent);
     }
 
