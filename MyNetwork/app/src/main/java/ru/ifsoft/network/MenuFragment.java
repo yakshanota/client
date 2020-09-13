@@ -19,6 +19,7 @@ import com.balysv.materialripple.MaterialRippleLayout;
 
 import ru.ifsoft.network.app.App;
 import ru.ifsoft.network.constants.Constants;
+import ru.ifsoft.network.view.ComingSoonActivity;
 
 
 public class MenuFragment extends Fragment implements Constants {
@@ -30,6 +31,8 @@ public class MenuFragment extends Fragment implements Constants {
     private ImageView mNavGalleryIcon, mNavGroupsIcon, mNavFriendsIcon, mNavGuestsIcon, mNavMarketIcon, mNavNearbyIcon, mNavFavoritesIcon, mNavStreamIcon, mNavPopularIcon, mNavUpgradesIcon, mNavSettingsIcon;
 
     private MaterialRippleLayout mNavGallery, mNavGroups, mNavStream, mNavFriends, mNavMarket, mNavGuests, mNavFavorites, mNavNearby, mNavPopular, mNavUpgrades, mNavSettings;
+
+    private MaterialRippleLayout mnav_artist,mnav_video,mnav_support,mnav_calender;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -63,6 +66,12 @@ public class MenuFragment extends Fragment implements Constants {
         mNavPopular = (MaterialRippleLayout) rootView.findViewById(R.id.nav_popular);
         mNavUpgrades = (MaterialRippleLayout) rootView.findViewById(R.id.nav_upgrades);
         mNavSettings = (MaterialRippleLayout) rootView.findViewById(R.id.nav_settings);
+
+        mnav_artist = (MaterialRippleLayout) rootView.findViewById(R.id.nav_artist);
+        mnav_video = (MaterialRippleLayout) rootView.findViewById(R.id.nav_video);
+        mnav_support = (MaterialRippleLayout) rootView.findViewById(R.id.nav_support);
+        mnav_calender = (MaterialRippleLayout) rootView.findViewById(R.id.nav_calender);
+
 
         // Counters
 
@@ -359,6 +368,47 @@ public class MenuFragment extends Fragment implements Constants {
                 startActivity(i);
             }
         });
+
+        mnav_artist.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mnav_video.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mnav_support.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mnav_calender.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                startActivity(i);
+            }
+        });
+
 
         updateView();
 

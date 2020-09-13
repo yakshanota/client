@@ -1332,7 +1332,7 @@ public class ProfileFragment extends Fragment implements Constants, SwipeRefresh
 
                 if ((profile.getAllowMessages() == 1) || (profile.getAllowMessages() == 0 && profile.isFriend())) {
 
-                    mAddMessageButton.setVisibility(View.VISIBLE);
+                    mAddMessageButton.setVisibility(View.GONE);
                 }
             }
         }
@@ -2329,7 +2329,7 @@ public class ProfileFragment extends Fragment implements Constants, SwipeRefresh
             } else {
 
                 //show all menu items
-                hideMenuItems(menu, true);
+                hideMenuItems(menu, false);
             }
 
         } else {
@@ -2788,7 +2788,7 @@ public class ProfileFragment extends Fragment implements Constants, SwipeRefresh
 
             mBlockButton.setVisibility(View.VISIBLE);
             mReportButton.setVisibility(View.VISIBLE);
-            mGiftButton.setVisibility(View.VISIBLE);
+            mGiftButton.setVisibility(View.GONE);
             mEditButton.setVisibility(View.GONE);
 
             if (profile.isBlocked()) {

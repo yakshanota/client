@@ -161,6 +161,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/spacing_medium"
                             android:layout_marginStart="@dimen/spacing_medium"
+                            android:visibility="gone"
                             android:gravity="center_vertical">
 
                             <ImageView

@@ -41,6 +41,7 @@
                         android:layout_marginBottom="@dimen/spacing_medium"
                         app:cardUseCompatPadding="false"
                         app:cardElevation="0dp"
+                        android:visibility="gone"
                         app:cardCornerRadius="0dp">
 
                         <LinearLayout

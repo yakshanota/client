@@ -14,7 +14,7 @@
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/clr_FF9800"
         android:theme="@style/ThemeOverlay.AppCompat.Light">
 
         <androidx.appcompat.widget.Toolbar
@@ -29,9 +29,10 @@
             android:contentInsetEnd="0dp"
             app:contentInsetRight="0dp"
             app:contentInsetEnd="0dp"
+            android:visibility="gone"
             app:layout_scrollFlags="scroll|enterAlways"
             android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/clr_FF9800"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
@@ -108,5 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

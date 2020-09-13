@@ -372,6 +372,7 @@
                                         android:id="@+id/addMessageButton"
                                         style="@style/MyRippleStyleDark"
                                         android:layout_width="0dp"
+                                        android:visibility="gone"
                                         android:layout_height="match_parent"
                                         android:layout_weight="1">
 
@@ -506,6 +507,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
+                            android:visibility="gone"
                             android:orientation="horizontal"
                             android:padding="5dp">
 
@@ -809,6 +811,7 @@
                             android:id="@+id/profileGiftsBtn"
                             style="@style/MyRippleStyleDark"
                             android:layout_width="0dp"
+                            android:visibility="gone"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
 

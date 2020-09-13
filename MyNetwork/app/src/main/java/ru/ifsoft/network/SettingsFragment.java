@@ -69,9 +69,9 @@ public class SettingsFragment extends PreferenceFragment implements Constants {
 //
 //        pref.setSummary(APP_COPYRIGHT + " © " + APP_YEAR);
 
-        balancePreference = findPreference("settings_balance");
+   //     balancePreference = findPreference("settings_balance");
 
-        balancePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+     /*   balancePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference arg0) {
 
@@ -93,17 +93,17 @@ public class SettingsFragment extends PreferenceFragment implements Constants {
 
                 return true;
             }
-        });
+        });*/
 
         logoutPreference = findPreference("settings_logout");
         aboutPreference = findPreference("settings_version");
         changePassword = findPreference("settings_change_password");
         itemDeactivateAccount = findPreference("settings_deactivate_account");
-        itemServices = findPreference("settings_services");
+      //  itemServices = findPreference("settings_services");
         itemTerms = findPreference("settings_terms");
         itemThanks = findPreference("settings_thanks");
         itemBlackList = findPreference("settings_blocked_list");
-        itemReferralsList = findPreference("settings_referrals_list");
+     //   itemReferralsList = findPreference("settings_referrals_list");
         itemNotifications = findPreference("settings_push_notifications");
         itemPrivacy = findPreference("settings_privacy");
         itemContactUs = findPreference("settings_contact_us");
@@ -152,7 +152,7 @@ public class SettingsFragment extends PreferenceFragment implements Constants {
             }
         });
 
-        itemReferralsList.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+    /*    itemReferralsList.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             public boolean onPreferenceClick(Preference arg0) {
 
@@ -161,7 +161,7 @@ public class SettingsFragment extends PreferenceFragment implements Constants {
 
                 return true;
             }
-        });
+        });*/
 
         itemThanks.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -348,7 +348,7 @@ public class SettingsFragment extends PreferenceFragment implements Constants {
             }
         });
 
-        itemServices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+       /* itemServices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -358,14 +358,14 @@ public class SettingsFragment extends PreferenceFragment implements Constants {
 
                 return true;
             }
-        });
+        });*/
 
-        if (!FACEBOOK_AUTHORIZATION) {
+     /*   if (!FACEBOOK_AUTHORIZATION) {
 
             PreferenceCategory headerGeneral = (PreferenceCategory) findPreference("header_general");
 
             headerGeneral.removePreference(itemServices);
-        }
+        }*/
 
         allowComments = (CheckBoxPreference) getPreferenceManager().findPreference("allowComments");
 

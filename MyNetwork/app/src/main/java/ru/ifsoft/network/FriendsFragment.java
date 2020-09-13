@@ -1,10 +1,14 @@
 package ru.ifsoft.network;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.core.widget.NestedScrollView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -13,6 +17,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
@@ -20,11 +25,13 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -80,6 +87,13 @@ public class FriendsFragment extends Fragment implements Constants, SwipeRefresh
     private Boolean loaded = false;
     private Boolean pager = false;
 
+    Menu MainMenu;
+    SearchView searchView = null;
+    private String queryText = "";
+    MenuItem searchItem, searchIcon;
+    private int search_gender = -1, search_online = -1, search_photo = -1;
+
+
     public FriendsFragment() {
         // Required empty public constructor
     }
@@ -100,7 +114,7 @@ public class FriendsFragment extends Fragment implements Constants, SwipeRefresh
 
         super.onCreate(savedInstanceState);
 
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
 
         if (savedInstanceState != null) {
 
@@ -305,7 +319,7 @@ public class FriendsFragment extends Fragment implements Constants, SwipeRefresh
 
                 if (isAdded()) {
 
-                    mSearchFriendsBox.setVisibility(View.VISIBLE);
+                    mSearchFriendsBox.setVisibility(View.GONE);
 
                     if (App.getInstance().getPhotoUrl() != null && App.getInstance().getPhotoUrl().length() > 0) {
 
@@ -369,6 +383,82 @@ public class FriendsFragment extends Fragment implements Constants, SwipeRefresh
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         super.onCreateOptionsMenu(menu, inflater);
+
+        menu.clear();
+
+        inflater.inflate(R.menu.menu_friends, menu);
+
+        MainMenu = menu;
+
+        searchIcon = menu.findItem(R.id.action_search_friends);
+        searchItem = menu.findItem(R.id.options_menu_main_search);
+
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        }
+
+        if (searchView != null) {
+
+            searchView.setQuery(queryText, false);
+
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchView.setIconifiedByDefault(false);
+            searchView.setIconified(false);
+
+            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+            searchAutoComplete.setHint(getText(R.string.placeholder_search));
+            searchAutoComplete.setHintTextColor(getResources().getColor(R.color.white));
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextChange(String newText) {
+
+                    queryText = newText;
+
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+
+                    queryText = query;
+                    if (App.getInstance().isConnected()) {
+                        searchItem.setVisible(false);
+                        searchIcon.setVisible(true);
+                        search();
+                    } else {
+
+                        Toast.makeText(getActivity(), getText(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
+                    }
+
+                    return false;
+                }
+            });
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+
+            case R.id.action_search_friends: {
+                searchIcon.setVisible(false);
+                searchItem.setVisible(true);
+                return true;
+            }
+
+            default: {
+
+                return super.onOptionsItemSelected(item);
+            }
+        }
     }
 
     public void getItems() {
@@ -400,7 +490,7 @@ public class FriendsFragment extends Fragment implements Constants, SwipeRefresh
 
                                 if (itemId == 0 && App.getInstance().getId() == profileId) {
 
-                                     App.getInstance().setNewFriendsCount(0);
+                                    App.getInstance().setNewFriendsCount(0);
                                 }
 
                                 itemId = response.getInt("itemId");
@@ -593,4 +683,97 @@ public class FriendsFragment extends Fragment implements Constants, SwipeRefresh
     public void onDetach() {
         super.onDetach();
     }
+
+    public void search() {
+
+        mItemsContainer.setRefreshing(true);
+
+        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_APP_SEARCH, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (!isAdded() || getActivity() == null) {
+
+                            Log.e("ERROR", "SearchFragment Not Added to Activity");
+
+                            return;
+                        }
+
+                        try {
+
+                            if (!loadingMore) {
+
+                                itemsList.clear();
+                            }
+
+                            arrayLength = 0;
+
+                            if (!response.getBoolean("error")) {
+
+
+                                if (response.has("items")) {
+
+                                    JSONArray usersArray = response.getJSONArray("items");
+
+                                    arrayLength = usersArray.length();
+
+                                    if (arrayLength > 0) {
+
+                                        for (int i = 0; i < usersArray.length(); i++) {
+
+                                            JSONObject profileObj = (JSONObject) usersArray.get(i);
+
+                                            Profile profile = new Profile(profileObj);
+
+                                            itemsList.add(profile);
+                                        }
+                                    }
+                                }
+                            }
+
+                        } catch (JSONException e) {
+
+                            e.printStackTrace();
+
+                        } finally {
+
+                            loadingComplete();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (!isAdded() || getActivity() == null) {
+
+                    Log.e("ERROR", "SearchFragment Not Added to Activity");
+
+                    return;
+                }
+
+                loadingComplete();
+
+                Log.e("SearchFragment search()", error.toString());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("accountId", Long.toString(App.getInstance().getId()));
+                params.put("accessToken", App.getInstance().getAccessToken());
+                params.put("query", queryText);
+                params.put("userId", Long.toString(profileId));
+                params.put("gender", Integer.toString(search_gender));
+                params.put("online", Integer.toString(search_online));
+                params.put("photo", Integer.toString(search_photo));
+
+                return params;
+            }
+        };
+
+        App.getInstance().addToRequestQueue(jsonReq);
+    }
+
 }

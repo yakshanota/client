@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:clipToPadding="false"
     android:scrollingCache="true">
 
@@ -23,8 +22,8 @@
             android:orientation="vertical">
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_gallery"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -33,7 +32,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/spacing_middle">
+                    android:padding="@dimen/spacing_middle"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/nav_gallery_icon"
@@ -53,8 +53,8 @@
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_groups"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -63,10 +63,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_groups_icon"
@@ -86,8 +86,41 @@
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/nav_artist"
                 style="@style/RippleStyleBlack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/spacing_middle"
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
+
+                    <ImageView
+                        android:id="@+id/nav_artist_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="@dimen/spacing_medium"
+                        app:srcCompat="@drawable/ic_arties_list" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/artist_list"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textColor="@color/grey_dark" />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <com.balysv.materialripple.MaterialRippleLayout
                 android:id="@+id/nav_friends"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -96,10 +129,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_friends_icon"
@@ -128,8 +161,8 @@
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_guests"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -138,10 +171,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_guests_icon"
@@ -170,8 +203,8 @@
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/nav_video"
                 style="@style/RippleStyleBlack"
-                android:id="@+id/nav_market"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -180,10 +213,45 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
+
+                    <ImageView
+                        android:id="@+id/nav_video_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="5dp"
+                        android:padding="@dimen/spacing_medium"
+                        app:srcCompat="@drawable/ic_video_icon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/video_list"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textColor="@color/grey_dark" />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/nav_market"
+                style="@style/RippleStyleBlack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/spacing_middle"
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_market_icon"
@@ -203,20 +271,21 @@
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_nearby"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_nearby_icon"
@@ -237,20 +306,21 @@
 
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_favorites"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_favorites_icon"
@@ -269,9 +339,10 @@
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
+
             <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/nav_support"
                 style="@style/RippleStyleBlack"
-                android:id="@+id/nav_stream"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -280,10 +351,78 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
+
+                    <ImageView
+                        android:id="@+id/nav_support_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="5dp"
+                        android:padding="@dimen/spacing_medium"
+                        app:srcCompat="@drawable/ic_support_new" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/support"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textColor="@color/grey_dark" />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/nav_calender"
+                style="@style/RippleStyleBlack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/spacing_middle"
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
+
+                    <ImageView
+                        android:id="@+id/nav_event_calender_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="5dp"
+                        android:padding="@dimen/spacing_medium"
+                        app:srcCompat="@drawable/ic_calender_icon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_calender"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textColor="@color/grey_dark" />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/nav_stream"
+                style="@style/RippleStyleBlack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/spacing_middle"
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_stream_icon"
@@ -303,8 +442,8 @@
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_popular"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -313,10 +452,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_popular_icon"
@@ -337,20 +476,21 @@
 
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_upgrades"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_upgrades_icon"
@@ -371,8 +511,8 @@
 
 
             <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleBlack"
                 android:id="@+id/nav_settings"
+                style="@style/RippleStyleBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -381,10 +521,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
                     android:paddingLeft="@dimen/spacing_middle"
-                    android:paddingRight="@dimen/spacing_middle" >
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:paddingRight="@dimen/spacing_middle"
+                    android:paddingBottom="@dimen/spacing_medium">
 
                     <ImageView
                         android:id="@+id/nav_settings_icon"

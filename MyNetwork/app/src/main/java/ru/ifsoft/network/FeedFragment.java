@@ -14,6 +14,7 @@ import android.os.Handler;
 import com.android.volley.RetryPolicy;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import androidx.fragment.app.Fragment;
 import androidx.core.widget.NestedScrollView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -22,6 +23,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -45,6 +47,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -80,6 +83,8 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
     private CircularImageView mNewItemImage;
     private TextView mNewItemTitle;
 
+    private FloatingActionButton mfeedButton;
+
     private RecyclerView mRecyclerView;
     private NestedScrollView mNestedView;
 
@@ -106,6 +111,11 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
     private ViewPager v_flipper;
     private TabLayout indicator;
+
+    int currentPage = 0;
+    Timer timer;
+    final long DELAY_MS = 5000;//delay in milliseconds before task is to be executed
+    final long PERIOD_MS = 5000; // time in milliseconds between successive task executions.
 
     public FeedFragment() {
         // Required empty public constructor
@@ -166,10 +176,11 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
         mNewItemBox = (CardView) rootView.findViewById(R.id.newItemBox);
         mNewItemButton = (MaterialRippleLayout) rootView.findViewById(R.id.newItemButton);
+        mfeedButton = (FloatingActionButton) rootView.findViewById(R.id.feedButton);
 
         if (!loaded) mNewItemBox.setVisibility(View.GONE);
 
-        mNewItemButton.setOnClickListener(new View.OnClickListener() {
+        mfeedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -186,10 +197,6 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
         updateProfileInfo();
 
-        // Slide view
-        itemsGalleryList = new ArrayList<>();
-        getGalleryItems();
-
 
         mNestedView = (NestedScrollView) rootView.findViewById(R.id.nested_view);
 
@@ -200,7 +207,7 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
             @Override
             public void onItemClick(View v, Item obj, int actionId, int position) {
 
-                switch (actionId){
+                switch (actionId) {
 
                     case ITEM_ACTION_REPOST: {
 
@@ -266,6 +273,9 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
                         loadingMore = true;
 
                         getItems();
+                        // Slide view
+                        itemsGalleryList = new ArrayList<>();
+                        getGalleryItems();
                     }
                 }
             }
@@ -306,7 +316,17 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
                             showMessage(getText(R.string.msg_loading_2).toString());
 
                             getItems();
+
+                            // Slide view
+                            itemsGalleryList = new ArrayList<>();
+                            getGalleryItems();
+
+                        } else {
+
+                            onRefresh();
+
                         }
+
                     }
                 }
             }, 50);
@@ -360,6 +380,9 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
             itemId = 0;
             getItems();
+            // Slide view
+            itemsGalleryList = new ArrayList<>();
+            getGalleryItems();
 
         } else {
 
@@ -376,6 +399,9 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
             itemId = 0;
             getItems();
+            // Slide view
+            itemsGalleryList = new ArrayList<>();
+            getGalleryItems();
 
         } else if (requestCode == ITEM_EDIT && resultCode == getActivity().RESULT_OK) {
 
@@ -702,9 +728,9 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
     }
 
     // Prevent dialog dismiss when orientation changes
-    private static void doKeepDialog(Dialog dialog){
+    private static void doKeepDialog(Dialog dialog) {
 
-        WindowManager.LayoutParams lp = new  WindowManager.LayoutParams();
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -801,7 +827,7 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
     public void report(final int position) {
 
-        String[] profile_report_categories = new String[] {
+        String[] profile_report_categories = new String[]{
 
                 getText(R.string.label_profile_report_0).toString(),
                 getText(R.string.label_profile_report_1).toString(),
@@ -978,7 +1004,6 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
                         try {
 
 
-
                             if (!response.getBoolean("error")) {
 
                                 itemId = response.getInt("itemId");
@@ -988,7 +1013,6 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
                                     JSONArray itemsArray = response.getJSONArray("items");
 
                                     arrayLength = itemsArray.length();
-
 
 
                                     if (arrayLength > 0) {
@@ -1011,10 +1035,32 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
                         } finally {
 
-                            Log.d("Gallery Response", response.toString());
-                            v_flipper.setAdapter(new SliderAdapter(getActivity(), itemsGalleryList ));
-                            indicator.setupWithViewPager(v_flipper, true);
+                            if (itemsGalleryList.size() > 0) {
+                                v_flipper.setVisibility(View.VISIBLE);
+                                Log.d("Gallery Response", response.toString());
+                                v_flipper.setAdapter(new SliderAdapter(getActivity(), itemsGalleryList));
+                                indicator.setupWithViewPager(v_flipper, true);
+                                /*After setting the adapter use the timer */
+                                final Handler handler = new Handler();
+                                final Runnable Update = new Runnable() {
+                                    public void run() {
+                                        if (currentPage == itemsGalleryList.size() - 1) {
+                                            currentPage = 0;
+                                        }
+                                        v_flipper.setCurrentItem(currentPage++, true);
+                                    }
+                                };
 
+                                timer = new Timer(); // This will create a new Thread
+                                timer.schedule(new TimerTask() { // task to be scheduled
+                                    @Override
+                                    public void run() {
+                                        handler.post(Update);
+                                    }
+                                }, DELAY_MS, PERIOD_MS);
+                            } else {
+                                v_flipper.setVisibility(View.GONE);
+                            }
 
                         }
                     }

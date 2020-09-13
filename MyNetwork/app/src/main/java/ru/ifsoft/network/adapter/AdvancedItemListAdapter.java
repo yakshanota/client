@@ -452,7 +452,7 @@ public class AdvancedItemListAdapter extends RecyclerView.Adapter<AdvancedItemLi
 
         if (p.getGroupId() == 0) {
 
-            holder.mAccessModeLayout.setVisibility(View.VISIBLE);
+            holder.mAccessModeLayout.setVisibility(View.GONE);
 
             if (p.getAccessMode() == 0) {
 

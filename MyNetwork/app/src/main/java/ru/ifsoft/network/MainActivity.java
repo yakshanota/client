@@ -8,11 +8,14 @@ import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.core.view.MenuItemCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -307,7 +310,7 @@ public class MainActivity extends ActivityBase {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                     animateTab(0);
                 }
@@ -319,9 +322,9 @@ public class MainActivity extends ActivityBase {
         // Groups tab
 
         mTabLayout.getTabAt(1).setCustomView(R.layout.tab_layout);
-        tab_icon = (ImageView)mTabLayout.getTabAt(1).getCustomView().findViewById(R.id.tab_icon);
+        tab_icon = (ImageView) mTabLayout.getTabAt(1).getCustomView().findViewById(R.id.tab_icon);
         tab_icon.setImageResource(R.drawable.ic_friends_tab_2);
-        tab_badge = (TextView)mTabLayout.getTabAt(1).getCustomView().findViewById(R.id.tab_badge);
+        tab_badge = (TextView) mTabLayout.getTabAt(1).getCustomView().findViewById(R.id.tab_badge);
         tab_badge.setText("");
         tab_badge.setVisibility(View.GONE);
         tab_layout = (RelativeLayout) mTabLayout.getTabAt(1).getCustomView().findViewById(R.id.tab_main_layout);
@@ -332,7 +335,7 @@ public class MainActivity extends ActivityBase {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                     animateTab(1);
                 }
@@ -345,9 +348,9 @@ public class MainActivity extends ActivityBase {
         // Profile tab
 
         mTabLayout.getTabAt(2).setCustomView(R.layout.tab_layout);
-        tab_icon = (ImageView)mTabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_icon);
+        tab_icon = (ImageView) mTabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_icon);
         tab_icon.setImageResource(R.drawable.ic_profile);
-        tab_badge = (TextView)mTabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge);
+        tab_badge = (TextView) mTabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge);
         tab_badge.setText("");
         tab_badge.setVisibility(View.GONE);
         tab_layout = (RelativeLayout) mTabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_main_layout);
@@ -357,7 +360,7 @@ public class MainActivity extends ActivityBase {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                     animateTab(2);
                 }
@@ -381,7 +384,7 @@ public class MainActivity extends ActivityBase {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                     animateTab(3);
                 }
@@ -390,12 +393,13 @@ public class MainActivity extends ActivityBase {
             }
         });
 
+
         // Menu tab
 
         mTabLayout.getTabAt(4).setCustomView(R.layout.tab_layout);
-        tab_icon = (ImageView)mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_icon);
+        tab_icon = (ImageView) mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_icon);
         tab_icon.setImageResource(R.drawable.ic_menu);
-        tab_badge = (TextView)mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_badge);
+        tab_badge = (TextView) mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_badge);
         tab_badge.setText("");
         tab_badge.setVisibility(View.GONE);
         tab_layout = (RelativeLayout) mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_main_layout);
@@ -405,7 +409,7 @@ public class MainActivity extends ActivityBase {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                     animateTab(4);
                 }
@@ -677,16 +681,16 @@ public class MainActivity extends ActivityBase {
 
             View v = getCurrentFocus();
 
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
 
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
 
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
 
                     v.clearFocus();
 
-                     hideKeyboard();
+                    hideKeyboard();
                 }
             }
         }

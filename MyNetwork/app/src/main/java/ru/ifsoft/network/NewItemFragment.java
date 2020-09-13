@@ -427,7 +427,7 @@ public class NewItemFragment extends Fragment implements Constants {
         mAccessModeTitle = (TextView) rootView.findViewById(R.id.access_mode_label);
         mAccessModeLayout = (LinearLayout) rootView.findViewById(R.id.access_mode_layout);
 
-        mAccessModeLayout.setOnClickListener(new View.OnClickListener() {
+   /*     mAccessModeLayout.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -464,7 +464,7 @@ public class NewItemFragment extends Fragment implements Constants {
                 AlertDialog d = builderSingle.create();
                 d.show();
             }
-        });
+        });*/
 
         mLocationIcon = (ImageView) rootView.findViewById(R.id.location_image);
         mLocationTitle = (TextView) rootView.findViewById(R.id.location_label);
@@ -647,7 +647,7 @@ public class NewItemFragment extends Fragment implements Constants {
 
         } else {
 
-            mAccessModeLayout.setVisibility(View.VISIBLE);
+            mAccessModeLayout.setVisibility(View.GONE);
 
             if (item.getAccessMode() == 0) {
 
@@ -689,7 +689,7 @@ public class NewItemFragment extends Fragment implements Constants {
 
             if (location.length() > 0) {
 
-                mLocationLayout.setVisibility(View.VISIBLE);
+                mLocationLayout.setVisibility(View.GONE);
                 mLocationTitle.setText(location);
             }
         }
@@ -750,7 +750,7 @@ public class NewItemFragment extends Fragment implements Constants {
 
             imageLoader.get(Constants.WEB_SITE + "feelings/" + Integer.toString(item.getFeeling()) + ".png", ImageLoader.getImageListener(mFeelingIcon, R.drawable.mood, R.drawable.mood));
 
-            mFeelingLayout.setVisibility(View.VISIBLE);
+            mFeelingLayout.setVisibility(View.GONE);
         }
     }
 

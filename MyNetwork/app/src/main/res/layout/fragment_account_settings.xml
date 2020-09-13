@@ -26,6 +26,7 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:id="@+id/sexSpinner" />
 
             <EditText
@@ -58,6 +59,7 @@
                 android:ems="10"
                 android:id="@+id/facebookPage"
                 android:maxLength="255"
+                android:visibility="gone"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp" />
 
@@ -67,6 +69,7 @@
                 android:hint="@string/placeholder_instagram_page"
                 android:id="@+id/instagramPage"
                 android:maxLength="255"
+                android:visibility="gone"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp" />
 
@@ -77,6 +80,7 @@
                 android:inputType="textMultiLine"
                 android:ems="10"
                 android:maxLength="255"
+                android:visibility="gone"
                 android:id="@+id/bio"
                 android:layout_marginTop="10dp" />
 
