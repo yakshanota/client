@@ -463,6 +463,7 @@
                     android:paddingRight="@dimen/spacing_middle"
                     android:paddingBottom="@dimen/spacing_medium">
 
+
                     <ImageView
                         android:id="@+id/nav_popular_icon"
                         android:layout_width="50dp"
