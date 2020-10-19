@@ -30,9 +30,9 @@ public class MenuFragment extends Fragment implements Constants {
 
     private ImageView mNavGalleryIcon, mNavGroupsIcon, mNavFriendsIcon, mNavGuestsIcon, mNavMarketIcon, mNavNearbyIcon, mNavFavoritesIcon, mNavStreamIcon, mNavPopularIcon, mNavUpgradesIcon, mNavSettingsIcon;
 
-    private MaterialRippleLayout mNavGallery, mNavGroups, mNavStream, mNavFriends, mNavMarket, mNavGuests, mNavFavorites, mNavNearby, mNavPopular, mNavUpgrades, mNavSettings;
+    private MaterialRippleLayout mNavGallery, mNavGroups, mNavStream, mNavFriends, mNavMarket, mNavGuests, mNavFavorites, mNavNearby, mNavPopular, mNavAds, mNavSettings;
 
-    private MaterialRippleLayout mnav_artist,mnav_video,mnav_support,mnav_calender;
+    private MaterialRippleLayout mnav_artist,mnav_video,mnav_support,mnav_profile;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -64,13 +64,13 @@ public class MenuFragment extends Fragment implements Constants {
         mNavFavorites = (MaterialRippleLayout) rootView.findViewById(R.id.nav_favorites);
         mNavStream = (MaterialRippleLayout) rootView.findViewById(R.id.nav_stream);
         mNavPopular = (MaterialRippleLayout) rootView.findViewById(R.id.nav_popular);
-        mNavUpgrades = (MaterialRippleLayout) rootView.findViewById(R.id.nav_upgrades);
+        mNavAds = (MaterialRippleLayout) rootView.findViewById(R.id.nav_ads);
         mNavSettings = (MaterialRippleLayout) rootView.findViewById(R.id.nav_settings);
 
         mnav_artist = (MaterialRippleLayout) rootView.findViewById(R.id.nav_artist);
         mnav_video = (MaterialRippleLayout) rootView.findViewById(R.id.nav_video);
         mnav_support = (MaterialRippleLayout) rootView.findViewById(R.id.nav_support);
-        mnav_calender = (MaterialRippleLayout) rootView.findViewById(R.id.nav_calender);
+        mnav_profile = (MaterialRippleLayout) rootView.findViewById(R.id.nav_profile);
 
 
         // Counters
@@ -89,7 +89,7 @@ public class MenuFragment extends Fragment implements Constants {
         mNavFavoritesIcon = (ImageView) rootView.findViewById(R.id.nav_favorites_icon);
         mNavStreamIcon = (ImageView) rootView.findViewById(R.id.nav_stream_icon);
         mNavPopularIcon = (ImageView) rootView.findViewById(R.id.nav_popular_icon);
-        mNavUpgradesIcon = (ImageView) rootView.findViewById(R.id.nav_upgrades_icon);
+        mNavUpgradesIcon = (ImageView) rootView.findViewById(R.id.nav_ads_icon);
         mNavSettingsIcon = (ImageView) rootView.findViewById(R.id.nav_settings_icon);
 
         if (!MARKETPLACE_FEATURE) {
@@ -97,10 +97,6 @@ public class MenuFragment extends Fragment implements Constants {
             mNavMarket.setVisibility(View.GONE);
         }
 
-        if (!UPGRADES_FEATURE) {
-
-            mNavUpgrades.setVisibility(View.GONE);
-        }
 
         mNavGallery.setOnTouchListener(new View.OnTouchListener() {
 
@@ -321,7 +317,7 @@ public class MenuFragment extends Fragment implements Constants {
             }
         });
 
-        mNavUpgrades.setOnTouchListener(new View.OnTouchListener() {
+        mNavAds.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -335,7 +331,7 @@ public class MenuFragment extends Fragment implements Constants {
             }
         });
 
-        mNavUpgrades.setOnClickListener(new View.OnClickListener() {
+        mNavAds.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -374,7 +370,7 @@ public class MenuFragment extends Fragment implements Constants {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                Intent i = new Intent(getActivity(), ArtistListActivity.class);
                 startActivity(i);
             }
         });
@@ -384,7 +380,7 @@ public class MenuFragment extends Fragment implements Constants {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                Intent i = new Intent(getActivity(), VideoListActivity.class);
                 startActivity(i);
             }
         });
@@ -394,17 +390,17 @@ public class MenuFragment extends Fragment implements Constants {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                Intent i = new Intent(getActivity(), SupportActivity.class);
                 startActivity(i);
             }
         });
 
-        mnav_calender.setOnClickListener(new View.OnClickListener() {
+        mnav_profile.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(getActivity(), ComingSoonActivity.class);
+                Intent i = new Intent(getActivity(), ProfileActivity.class);
                 startActivity(i);
             }
         });

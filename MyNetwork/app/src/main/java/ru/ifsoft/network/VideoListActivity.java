@@ -2,42 +2,60 @@ package ru.ifsoft.network;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import ru.ifsoft.network.common.ActivityBase;
 
-public class SupportActivity extends ActivityBase {
+public class VideoListActivity extends ActivityBase {
 
     Toolbar mToolbar;
 
     Fragment fragment;
+    Boolean restore = false;
+
+    private Boolean gcm = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_support);
+
+        setContentView(R.layout.activity_video_list);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         if (savedInstanceState != null) {
 
             fragment = getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
 
+            restore = savedInstanceState.getBoolean("restore");
+            gcm = savedInstanceState.getBoolean("gcm");
+
         } else {
 
-            fragment = new SupportFragment();
+            fragment = new VideoListFragment();
+            getSupportActionBar().setTitle(R.string.video_list);
+
+            restore = false;
+            gcm = false;
         }
 
+        Intent i = getIntent();
+
+        gcm = i.getBooleanExtra("gcm", false);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container_body, fragment).commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container_body, fragment)
+                .commit();
     }
 
     @Override
@@ -45,22 +63,9 @@ public class SupportActivity extends ActivityBase {
 
         super.onSaveInstanceState(outState);
 
+        outState.putBoolean("restore", true);
+        outState.putBoolean("gcm", gcm);
         getSupportFragmentManager().putFragment(outState, "currentFragment", fragment);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        fragment.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_support, menu);
-        return true;
     }
 
     @Override
@@ -69,18 +74,12 @@ public class SupportActivity extends ActivityBase {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-
         switch (item.getItemId()) {
 
             case android.R.id.home: {
 
-                SupportFragment fragment = (SupportFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.container_body);
-                if (fragment.canGoBack()) {
-                    fragment.goBack();
-                } else {
-                    super.onBackPressed();
-                }
+                getMainActivity();
+
                 return true;
             }
 
@@ -94,12 +93,22 @@ public class SupportActivity extends ActivityBase {
     @Override
     public void onBackPressed() {
         // your code.
-        SupportFragment fragment = (SupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.container_body);
-        if (fragment.canGoBack()) {
-            fragment.goBack();
+
+        getMainActivity();
+    }
+
+    public void getMainActivity() {
+
+        if (gcm) {
+
+            ActivityCompat.finishAffinity(VideoListActivity.this);
+
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+
         } else {
-            super.onBackPressed();
+
+            finish();
         }
     }
 }

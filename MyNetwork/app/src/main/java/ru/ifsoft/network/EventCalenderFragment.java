@@ -1,56 +1,42 @@
 package ru.ifsoft.network;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import ru.ifsoft.network.app.App;
 import ru.ifsoft.network.constants.Constants;
-import ru.ifsoft.network.util.CustomRequest;
 
-public class SupportFragment extends Fragment implements Constants {
+public class EventCalenderFragment extends Fragment implements Constants {
 
     private static final String STATE_LIST = "State Adapter Data";
     RelativeLayout mWebViewLoadingScreen, mWebViewErrorScreen, mWebViewContentScreen;
 
     WebView mWebView;
 
-    public SupportFragment() {
+    public EventCalenderFragment() {
         // Required empty public constructor
     }
 
+    public EventCalenderFragment newInstance(Boolean pager) {
 
-    public boolean canGoBack() {
-        return mWebView.canGoBack();
-    }
+        EventCalenderFragment myFragment = new EventCalenderFragment();
 
-    public void goBack() {
-        mWebView.goBack();
+        Bundle args = new Bundle();
+        args.putBoolean("pager", pager);
+        myFragment.setArguments(args);
+
+        return myFragment;
     }
 
     @Override
@@ -106,12 +92,14 @@ public class SupportFragment extends Fragment implements Constants {
             settings.setSupportZoom(false);
             mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
             mWebView.getSettings().setBuiltInZoomControls(false);
-            mWebView.loadUrl(METHOD_SUPPORT_ARTIST);
+            mWebView.loadUrl(METHOD_EVENT_CALENDAR);
 
         } else {
 
             showErrorScreen();
         }
+
+
 
         // Inflate the layout for this fragment
         return rootView;

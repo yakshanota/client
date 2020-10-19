@@ -1,16 +1,27 @@
 package ru.ifsoft.network;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,306 +41,112 @@ import ru.ifsoft.network.util.CustomRequest;
 
 public class UpgradesFragment extends Fragment implements Constants {
 
-    private ProgressDialog pDialog;
+    private static final String STATE_LIST = "State Adapter Data";
+    RelativeLayout mWebViewLoadingScreen, mWebViewErrorScreen, mWebViewContentScreen;
 
-    Button mGetCreditsButton, mGhostModeButton, mVerifiedBadgeButton, mDisableAdsButton;
-    TextView mLabelCredits, mLabelGhostModeStatus, mLabelVerifiedBadgeStatus, mLabelDisableAdsStatus;
-
-    private Boolean loading = false;
+    WebView mWebView;
 
     public UpgradesFragment() {
         // Required empty public constructor
     }
+    public boolean canGoBack() {
+        return mWebView.canGoBack();
+    }
 
+    public void goBack() {
+        mWebView.goBack();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
-
-        initpDialog();
+        setHasOptionsMenu(false);
     }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_upgrades, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_inactive_artist, container, false);
 
-        if (loading) {
+        mWebView = (WebView) rootView.findViewById(R.id.webView);
+        mWebViewErrorScreen = (RelativeLayout) rootView.findViewById(R.id.WebViewErrorScreen);
+        mWebViewLoadingScreen = (RelativeLayout) rootView.findViewById(R.id.WebViewLoadingScreen);
+        mWebViewContentScreen = (RelativeLayout) rootView.findViewById(R.id.WebViewContentScreen);
 
-            showpDialog();
+        mWebView.setWebViewClient(new WebViewClient() {
+
+            //If you will not use this method url links are opeen in new brower not in webview
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+                view.loadUrl(url);
+                return true;
+            }
+
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+
+                showLoadingScreen();
+            }
+
+            public void onPageFinished(WebView view, String url) {
+
+                showContentScreen();
+            }
+
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+
+                showErrorScreen();
+                Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        mWebView.getSettings().setJavaScriptEnabled(true);
+
+        if (App.getInstance().isConnected()) {
+            WebSettings settings = mWebView.getSettings();
+            settings.setSupportZoom(false);
+            mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+            mWebView.getSettings().setBuiltInZoomControls(false);
+            mWebView.loadUrl(METHOD_ADVERTISE);
+
+
+        } else {
+
+            showErrorScreen();
         }
-
-        mLabelCredits = (TextView) rootView.findViewById(R.id.labelCredits);
-
-        mLabelGhostModeStatus = (TextView) rootView.findViewById(R.id.labelGhostModeStatus);
-        mLabelVerifiedBadgeStatus = (TextView) rootView.findViewById(R.id.labelVerifiedBadgeStatus);
-        mLabelDisableAdsStatus = (TextView) rootView.findViewById(R.id.labelDisableAdsStatus);
-
-        mGhostModeButton = (Button) rootView.findViewById(R.id.ghostModeBtn);
-        mVerifiedBadgeButton = (Button) rootView.findViewById(R.id.verifiedBadgeBtn);
-        mDisableAdsButton = (Button) rootView.findViewById(R.id.disableAdsBtn);
-
-        mGetCreditsButton = (Button) rootView.findViewById(R.id.getCreditsBtn);
-
-        mGetCreditsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(getActivity(), BalanceActivity.class);
-                startActivityForResult(i, 1945);
-            }
-        });
-
-        mGhostModeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (App.getInstance().getBalance() >= GHOST_MODE_COST) {
-
-                    upgrade(PA_BUY_GHOST_MODE, GHOST_MODE_COST);
-
-                } else {
-
-                    Toast.makeText(getActivity(), getString(R.string.error_credits), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        mVerifiedBadgeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (App.getInstance().getBalance() >= VERIFIED_BADGE_COST) {
-
-                    upgrade(PA_BUY_VERIFIED_BADGE, VERIFIED_BADGE_COST);
-
-                } else {
-
-                    Toast.makeText(getActivity(), getString(R.string.error_credits), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        mDisableAdsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (App.getInstance().getBalance() >= DISABLE_ADS_COST) {
-
-                    upgrade(PA_BUY_DISABLE_ADS, DISABLE_ADS_COST);
-
-                } else {
-
-                    Toast.makeText(getActivity(), getString(R.string.error_credits), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        update();
 
         // Inflate the layout for this fragment
         return rootView;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void showLoadingScreen() {
 
-        super.onSaveInstanceState(outState);
+        mWebViewErrorScreen.setVisibility(View.GONE);
+        mWebViewContentScreen.setVisibility(View.GONE);
+
+        mWebViewLoadingScreen.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void showErrorScreen() {
 
-        super.onActivityResult(requestCode, resultCode, data);
+        mWebViewLoadingScreen.setVisibility(View.GONE);
+        mWebViewContentScreen.setVisibility(View.GONE);
 
-        if (requestCode == 1945 && resultCode == getActivity().RESULT_OK && null != data) {
-
-            update();
-        }
+        mWebViewErrorScreen.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+    public void showContentScreen() {
 
-        super.onCreateOptionsMenu(menu, inflater);
+        mWebViewErrorScreen.setVisibility(View.GONE);
+        mWebViewLoadingScreen.setVisibility(View.GONE);
+
+        mWebViewContentScreen.setVisibility(View.VISIBLE);
     }
 
-    public void onDestroyView() {
-
-        super.onDestroyView();
-
-        hidepDialog();
-    }
-
-    @Override
-    public void onStart() {
-
-        super.onStart();
-
-        update();
-    }
-
-    public void update() {
-
-        mLabelCredits.setText(getString(R.string.label_credits) + " (" + Integer.toString(App.getInstance().getBalance()) + ")");
-
-        mGhostModeButton.setText(getString(R.string.action_enable) + " (" + Integer.toString(GHOST_MODE_COST) + ")");
-        mVerifiedBadgeButton.setText(getString(R.string.action_enable) + " (" + Integer.toString(VERIFIED_BADGE_COST) + ")");
-        mDisableAdsButton.setText(getString(R.string.action_enable) + " (" + Integer.toString(DISABLE_ADS_COST) + ")");
-
-        if (App.getInstance().getGhost() == 0) {
-
-            mLabelGhostModeStatus.setVisibility(View.GONE);
-            mGhostModeButton.setEnabled(true);
-            mGhostModeButton.setVisibility(View.VISIBLE);
-
-        } else {
-
-            mLabelGhostModeStatus.setVisibility(View.VISIBLE);
-            mGhostModeButton.setEnabled(false);
-            mGhostModeButton.setVisibility(View.GONE);
-        }
-
-        if (App.getInstance().getVerify() == 0) {
-
-            mLabelVerifiedBadgeStatus.setVisibility(View.GONE);
-            mVerifiedBadgeButton.setEnabled(true);
-            mVerifiedBadgeButton.setVisibility(View.VISIBLE);
-
-        } else {
-
-            mLabelVerifiedBadgeStatus.setVisibility(View.VISIBLE);
-            mVerifiedBadgeButton.setEnabled(false);
-            mVerifiedBadgeButton.setVisibility(View.GONE);
-        }
-
-        if (App.getInstance().getAdmob() == ADMOB_ENABLED) {
-
-            mLabelDisableAdsStatus.setVisibility(View.GONE);
-            mDisableAdsButton.setEnabled(true);
-            mDisableAdsButton.setVisibility(View.VISIBLE);
-
-        } else {
-
-            mLabelDisableAdsStatus.setVisibility(View.VISIBLE);
-            mDisableAdsButton.setEnabled(false);
-            mDisableAdsButton.setVisibility(View.GONE);
-        }
-    }
-
-    public void upgrade(final int upgradeType, final int credits) {
-
-        loading = true;
-
-        showpDialog();
-
-        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_ACCOUNT_UPGRADE, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-
-                            if (!response.getBoolean("error")) {
-
-                                switch (upgradeType) {
-
-                                    case PA_BUY_VERIFIED_BADGE: {
-
-                                        App.getInstance().setBalance(App.getInstance().getBalance() - credits);
-                                        App.getInstance().setVerify(1);
-
-                                        Toast.makeText(getActivity(), getString(R.string.msg_success_verified_badge), Toast.LENGTH_SHORT).show();
-
-                                        break;
-                                    }
-
-                                    case PA_BUY_GHOST_MODE: {
-
-                                        App.getInstance().setBalance(App.getInstance().getBalance() - credits);
-                                        App.getInstance().setGhost(1);
-
-                                        Toast.makeText(getActivity(), getString(R.string.msg_success_ghost_mode), Toast.LENGTH_SHORT).show();
-
-                                        break;
-                                    }
-
-                                    case PA_BUY_DISABLE_ADS: {
-
-                                        App.getInstance().setBalance(App.getInstance().getBalance() - credits);
-                                        App.getInstance().setAdmob(ADMOB_DISABLED);
-
-                                        Toast.makeText(getActivity(), getString(R.string.msg_success_disable_ads), Toast.LENGTH_SHORT).show();
-
-                                        break;
-                                    }
-
-                                    default: {
-
-                                        break;
-                                    }
-                                }
-                            }
-
-                        } catch (JSONException e) {
-
-                            e.printStackTrace();
-
-                        } finally {
-
-                            loading = false;
-
-                            hidepDialog();
-
-                            update();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                loading = false;
-
-                update();
-
-                hidepDialog();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("accountId", Long.toString(App.getInstance().getId()));
-                params.put("accessToken", App.getInstance().getAccessToken());
-                params.put("upgradeType", Integer.toString(upgradeType));
-                params.put("credits", Integer.toString(credits));
-
-                return params;
-            }
-        };
-
-        App.getInstance().addToRequestQueue(jsonReq);
-    }
-
-    protected void initpDialog() {
-
-        pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage(getString(R.string.msg_loading));
-        pDialog.setCancelable(false);
-    }
-
-    protected void showpDialog() {
-
-        if (!pDialog.isShowing()) pDialog.show();
-    }
-
-    protected void hidepDialog() {
-
-        if (pDialog.isShowing()) pDialog.dismiss();
-    }
 
     @Override
     public void onAttach(Activity activity) {

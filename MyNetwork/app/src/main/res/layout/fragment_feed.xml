@@ -41,7 +41,6 @@
                             android:id="@+id/newItemBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/spacing_medium"
                             app:cardCornerRadius="0dp"
                             app:cardElevation="0dp"
                             app:cardUseCompatPadding="false">
@@ -100,23 +99,32 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <androidx.viewpager.widget.ViewPager
-                            android:id="@+id/v_viewflipper"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="160dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_gravity="center"
-                            android:background="@color/gray_bg" />
+                            android:layout_height="160dp">
 
-                        <com.google.android.material.tabs.TabLayout
-                            android:id="@+id/indicator"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerInParent="true"
-                            app:tabBackground="@drawable/tab_selector"
-                            app:tabGravity="center"
-                            app:tabIndicatorHeight="0dp" />
+                            <androidx.viewpager.widget.ViewPager
+                                android:id="@+id/v_viewflipper"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_gravity="center"
+                                android:background="@color/gray_bg" />
+
+                            <com.google.android.material.tabs.TabLayout
+                                android:id="@+id/indicator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="35dp"
+                                android:layout_marginLeft="30dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                app:tabBackground="@drawable/tab_selector"
+                                app:tabGravity="fill"
+                                app:tabIndicatorHeight="0dp" />
+
+                        </RelativeLayout>
+
+
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycler_view"

@@ -67,7 +67,13 @@ public class UpgradesActivity extends ActivityBase {
 
             case android.R.id.home: {
 
-                finish();
+                UpgradesFragment fragment = (UpgradesFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.container_body);
+                if (fragment.canGoBack()) {
+                    fragment.goBack();
+                } else {
+                    super.onBackPressed();
+                }
 
                 return true;
             }
@@ -82,7 +88,12 @@ public class UpgradesActivity extends ActivityBase {
     @Override
     public void onBackPressed() {
         // your code.
-
-        finish();
+        UpgradesFragment fragment = (UpgradesFragment)
+                getSupportFragmentManager().findFragmentById(R.id.container_body);
+        if (fragment.canGoBack()) {
+            fragment.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -412,7 +412,7 @@ public class SearchFragment extends Fragment implements Constants, SwipeRefreshL
             searchView.setIconifiedByDefault(false);
             searchView.setIconified(false);
 
-            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+            SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
             searchAutoComplete.setHint(getText(R.string.placeholder_search));
             searchAutoComplete.setHintTextColor(getResources().getColor(R.color.white));
 

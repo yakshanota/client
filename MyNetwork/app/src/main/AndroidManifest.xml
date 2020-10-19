@@ -20,20 +20,20 @@
     <!-- android:largeHeap="true" -->
 
     <application
-        android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true"
         android:name=".app.App"
         android:allowBackup="true"
-        android:largeHeap="true"
         android:icon="@drawable/ic_app_icon"
-        android:roundIcon="@drawable/ic_app_icon"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme">
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/ic_app_icon"
+        android:theme="@style/MyMaterialTheme"
+        android:usesCleartextTraffic="true">
 
         <!-- AdMob App ID -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_app_id"/>
+            android:value="@string/admob_app_id" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -43,7 +43,7 @@
 
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
 
         </provider>
 
@@ -55,20 +55,23 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
@@ -102,8 +105,7 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
 
-        <service
-            android:name=".service.MyFcmListenerService">
+        <service android:name=".service.MyFcmListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -120,8 +122,8 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
-            android:windowSoftInputMode="stateHidden"
-            android:label="@string/title_activity_feeds" />
+            android:label="@string/title_activity_feeds"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".RecoveryActivity"
             android:label="@string/title_activity_recovery"
@@ -254,8 +256,7 @@
             android:name=".BalanceActivity"
             android:label="@string/title_activity_balance"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme">
-        </activity>
+            android:theme="@style/MyMaterialTheme"></activity>
 
         <activity
             android:name=".SendGiftActivity"
@@ -271,7 +272,7 @@
             android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".WelcomeActivity"
-            android:label="@string/title_activity_welcome"/>
+            android:label="@string/title_activity_welcome" />
         <activity
             android:name=".ReferralsActivity"
             android:label="@string/title_activity_referrals"
@@ -320,7 +321,7 @@
 
         <activity
             android:name=".UpgradesActivity"
-            android:label="@string/title_activity_upgrades"
+            android:label="@string/advertise"
             android:theme="@style/MyMaterialTheme" />
 
         <activity
@@ -330,18 +331,42 @@
 
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/title_activity_signup"/>
+            android:label="@string/title_activity_signup" />
 
         <activity android:name=".MediaViewerActivity" />
 
         <activity
             android:name=".BalanceHistoryActivity"
-            android:label="@string/title_activity_balance_history"/>
+            android:label="@string/title_activity_balance_history" />
 
         <activity
             android:name=".view.ComingSoonActivity"
-            android:theme="@style/MyMaterialTheme"
-            />
+            android:theme="@style/MyMaterialTheme" />
+
+        <activity
+            android:name=".ArtistListActivity"
+            android:label="@string/artist_list" />
+
+        <activity
+            android:name=".ActiveArtistSearchActivity"
+            android:label="@string/title_activity_search">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <activity
+            android:name=".VideoListActivity"
+            android:label="@string/video_list"
+            android:theme="@style/MyMaterialTheme" />
+
+        <activity
+            android:name=".VideoSearchActivity"
+            android:label="@string/title_activity_search">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
 
     </application>
 

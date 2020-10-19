@@ -439,7 +439,7 @@ public class FeedFragment extends Fragment implements Constants, SwipeRefreshLay
 
         mItemsContainer.setRefreshing(true);
 
-        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_FEEDS_GET, null,
+        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_STREAM_GET, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

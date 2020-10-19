@@ -209,8 +209,9 @@ public class MainActivity extends ActivityBase {
 
         adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new FeedFragment(), "");
-        adapter.addFragment(new FriendsFragment().newInstance(true), "");
-        adapter.addFragment(new ProfileFragment().newInstance(true), "");
+        adapter.addFragment(new MainActiveArtistFragment().newInstance(true), "");
+        adapter.addFragment(new MainVideoListFragment().newInstance(true), "");
+        adapter.addFragment(new EventCalenderFragment().newInstance(true), "");
         adapter.addFragment(new NotificationsFragment(), "");
         adapter.addFragment(new MenuFragment(), "");
         mViewPager.setAdapter(adapter);
@@ -323,7 +324,7 @@ public class MainActivity extends ActivityBase {
 
         mTabLayout.getTabAt(1).setCustomView(R.layout.tab_layout);
         tab_icon = (ImageView) mTabLayout.getTabAt(1).getCustomView().findViewById(R.id.tab_icon);
-        tab_icon.setImageResource(R.drawable.ic_friends_tab_2);
+        tab_icon.setImageResource(R.drawable.ic_arties_list);
         tab_badge = (TextView) mTabLayout.getTabAt(1).getCustomView().findViewById(R.id.tab_badge);
         tab_badge.setText("");
         tab_badge.setVisibility(View.GONE);
@@ -345,11 +346,9 @@ public class MainActivity extends ActivityBase {
         });
 
 
-        // Profile tab
-
         mTabLayout.getTabAt(2).setCustomView(R.layout.tab_layout);
         tab_icon = (ImageView) mTabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_icon);
-        tab_icon.setImageResource(R.drawable.ic_profile);
+        tab_icon.setImageResource(R.drawable.ic_video_icon);
         tab_badge = (TextView) mTabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge);
         tab_badge.setText("");
         tab_badge.setVisibility(View.GONE);
@@ -357,6 +356,7 @@ public class MainActivity extends ActivityBase {
 
         tab_layout.setOnTouchListener(new View.OnTouchListener() {
 
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -369,12 +369,13 @@ public class MainActivity extends ActivityBase {
             }
         });
 
-        // Notifications tab
+
+        // Profile tab
 
         mTabLayout.getTabAt(3).setCustomView(R.layout.tab_layout);
-        tab_icon = (ImageView)mTabLayout.getTabAt(3).getCustomView().findViewById(R.id.tab_icon);
-        tab_icon.setImageResource(R.drawable.ic_notifications);
-        tab_badge = (TextView)mTabLayout.getTabAt(3).getCustomView().findViewById(R.id.tab_badge);
+        tab_icon = (ImageView) mTabLayout.getTabAt(3).getCustomView().findViewById(R.id.tab_icon);
+        tab_icon.setImageResource(R.drawable.ic_calender_icon);
+        tab_badge = (TextView) mTabLayout.getTabAt(3).getCustomView().findViewById(R.id.tab_badge);
         tab_badge.setText("");
         tab_badge.setVisibility(View.GONE);
         tab_layout = (RelativeLayout) mTabLayout.getTabAt(3).getCustomView().findViewById(R.id.tab_main_layout);
@@ -393,13 +394,12 @@ public class MainActivity extends ActivityBase {
             }
         });
 
-
-        // Menu tab
+        // Notifications tab
 
         mTabLayout.getTabAt(4).setCustomView(R.layout.tab_layout);
-        tab_icon = (ImageView) mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_icon);
-        tab_icon.setImageResource(R.drawable.ic_menu);
-        tab_badge = (TextView) mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_badge);
+        tab_icon = (ImageView)mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_icon);
+        tab_icon.setImageResource(R.drawable.ic_notifications);
+        tab_badge = (TextView)mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_badge);
         tab_badge.setText("");
         tab_badge.setVisibility(View.GONE);
         tab_layout = (RelativeLayout) mTabLayout.getTabAt(4).getCustomView().findViewById(R.id.tab_main_layout);
@@ -412,6 +412,31 @@ public class MainActivity extends ActivityBase {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                     animateTab(4);
+                }
+
+                return false;
+            }
+        });
+
+
+        // Menu tab
+
+        mTabLayout.getTabAt(5).setCustomView(R.layout.tab_layout);
+        tab_icon = (ImageView) mTabLayout.getTabAt(5).getCustomView().findViewById(R.id.tab_icon);
+        tab_icon.setImageResource(R.drawable.ic_menu);
+        tab_badge = (TextView) mTabLayout.getTabAt(5).getCustomView().findViewById(R.id.tab_badge);
+        tab_badge.setText("");
+        tab_badge.setVisibility(View.GONE);
+        tab_layout = (RelativeLayout) mTabLayout.getTabAt(5).getCustomView().findViewById(R.id.tab_main_layout);
+
+        tab_layout.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                    animateTab(5);
                 }
 
                 return false;
@@ -440,19 +465,26 @@ public class MainActivity extends ActivityBase {
 
             case 1: {
 
-                tab_icon.setImageResource(R.drawable.ic_friends_tab_2_active);
+                tab_icon.setImageResource(R.drawable.ic_arties_list);
 
                 break;
             }
 
             case 2: {
 
-                tab_icon.setImageResource(R.drawable.ic_profile_active);
+                tab_icon.setImageResource(R.drawable.ic_video_icon);
 
                 break;
             }
 
             case 3: {
+
+                tab_icon.setImageResource(R.drawable.ic_calender_icon);
+
+                break;
+            }
+
+            case 4: {
 
                 tab_icon.setImageResource(R.drawable.ic_notifications_active);
 
@@ -485,19 +517,26 @@ public class MainActivity extends ActivityBase {
 
             case 1: {
 
-                tab_icon.setImageResource(R.drawable.ic_friends_tab_2);
+                tab_icon.setImageResource(R.drawable.ic_arties_list);
 
                 break;
             }
 
             case 2: {
 
-                tab_icon.setImageResource(R.drawable.ic_profile);
+                tab_icon.setImageResource(R.drawable.ic_video_icon);
 
                 break;
             }
 
             case 3: {
+
+                tab_icon.setImageResource(R.drawable.ic_calender_icon);
+
+                break;
+            }
+
+            case 4: {
 
                 tab_icon.setImageResource(R.drawable.ic_notifications);
 
@@ -720,6 +759,15 @@ public class MainActivity extends ActivityBase {
         super.onPause();
 
         unregisterReceiver(mMessageReceiver);
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        View focusedView = getCurrentFocus();
+
+        if (focusedView != null) {
+
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     //This is the handler that will manager to process the broadcast intent

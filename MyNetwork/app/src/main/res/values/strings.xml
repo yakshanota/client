@@ -303,7 +303,7 @@
     <string name="title_activity_chat">Chat</string>
     <string name="title_activity_notifications_settings">Push notifications</string>
     <string name="title_activity_favorites">Favorites</string>
-    <string name="title_activity_support">Contact us</string>
+    <string name="title_activity_support">Support</string>
     <string name="title_activity_location">Location</string>
     <string name="title_activity_edit_item">Edit</string>
     <string name="title_activity_deactivate">Deactivate Account</string>
@@ -908,5 +908,9 @@
     <string name="video_list">Video List</string>
     <string name="support">Support</string>
     <string name="event_calender">Event Calender</string>
+    <string name="str_active_artist">Active Artist</string>
+    <string name="str_in_active_artist">In Active Artist</string>
+    <string name="profile">Profile</string>
+    <string name="advertise">Advertise</string>
 
 </resources>

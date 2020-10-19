@@ -206,6 +206,16 @@ public interface Constants {
     public static final String METHOD_PAYMENTS_GET = API_DOMAIN + "api/" + API_VERSION + "/method/payments.get" + API_FILE_EXTENSION;
 
     public static final String METHOD_MELA_GET = API_DOMAIN + "api/" + API_VERSION + "/method/mela.get" + API_FILE_EXTENSION;
+    public static final String METHOD_ACTIVE_ARTIST = API_DOMAIN + "api/" + API_VERSION + "/method/artistlist.get" + API_FILE_EXTENSION;
+    public static final String METHOD_ACTIVE_ARTIST_SEARCH = API_DOMAIN + "api/" + API_VERSION + "/method/artistsearch.get" + API_FILE_EXTENSION;
+    public static final String METHOD_VIDEO_LIST = API_DOMAIN + "api/" + API_VERSION + "/method/allvideolist.get" + API_FILE_EXTENSION;
+    public static final String METHOD_VIDEO_SEARCH = API_DOMAIN + "api/" + API_VERSION + "/method/allvideolistsearch.get" + API_FILE_EXTENSION;
+
+    public static final String METHOD_INACTIVE_ARTIST = API_DOMAIN + "m/parichaya/parichaya.html" ;
+    public static final String METHOD_SUPPORT_ARTIST = API_DOMAIN + "m/help/help.html" ;
+    public static final String METHOD_EVENT_CALENDAR = API_DOMAIN + "m/event/event.html" ;
+    public static final String METHOD_ADVERTISE = API_DOMAIN + "m/adds/adds.html" ;
+
     // Other Constants
 
     public static final int APP_TYPE_ALL = -1;
