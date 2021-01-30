@@ -10,15 +10,12 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login_bk"
-       >
+        android:background="@color/transparent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_marginTop="-40dp"
             android:padding="@dimen/spacing_mlarge">
 
             <com.facebook.login.widget.LoginButton xmlns:facebook="http://schemas.android.com/apk/res-auto"
@@ -59,103 +56,108 @@
                     android:textColor="@color/light_blue" />
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-
-                app:srcCompat="@drawable/header_img" />
 
             <EditText
                 android:id="@+id/username_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:ems="10"
-                android:hint="@string/place_holder_mobile_no"
-                android:inputType="phone"
-                android:maxLength="24" />
+                android:paddingLeft="10dp"
+                android:background="@drawable/round_corner_edittext"
+                android:hint="@string/event_name_place_holder"
+                android:inputType="text"
+                />
 
             <EditText
                 android:id="@+id/fullname_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:ems="10"
-                android:hint="@string/placeholder_fullname"
-                android:inputType="textPersonName"
-                android:maxLength="24" />
+                android:paddingLeft="10dp"
+                android:background="@drawable/round_corner_edittext"
+                android:hint="@string/event_place_placeholder"
+                android:inputType="text"
+                 />
 
             <EditText
-                android:id="@+id/password_edit"
+                android:id="@+id/edt_desc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:ems="10"
-                android:hint="@string/placeholder_password"
-                android:inputType="textPassword"
-                android:maxLength="20" />
-
-            <EditText
-                android:id="@+id/email_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:hint="@string/placeholder_email"
-                android:inputType="textEmailAddress"
-                android:maxLength="64"
-                android:visibility="gone" />
+                android:paddingLeft="10dp"
+                android:background="@drawable/round_corner_edittext"
+                android:hint="@string/event_description"
+                android:inputType="text"
+                 />
 
             <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/event_mela"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/label_signup_invite"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/referrer_edit"
+                android:paddingLeft="10dp"
+                android:gravity="center|left"
+                android:background="@drawable/round_corner_edittext"
+                android:hint="@string/select_event_mela_placeholder"
+                android:textSize="16sp"
+                android:visibility="visible" />
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:hint="@string/label_user_id"
-                android:inputType="number"
-                android:maxLength="6"
-                android:visibility="gone" />
+                android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/event_image"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/label_register_terms" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center|left"
+                android:background="@drawable/round_corner_edittext"
+                android:hint="@string/select_event_image_palceholder"
+                android:textSize="16sp"
+                android:visibility="visible" />
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:scaleType="centerCrop"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@+id/event_image"
+                    android:id="@+id/imv_event"
+                    android:src="@drawable/img_loading"/>
+
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/button_terms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/signup_label_terms_and_policies"
-                android:textColor="@color/light_blue" />
+                android:id="@+id/event_date"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:gravity="center|left"
+                android:background="@drawable/round_corner_edittext"
+                android:hint="@string/select_event_date"
+                android:textSize="16sp"
+                android:visibility="visible" />
+
 
             <Button
                 android:id="@+id/button_continue"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/round_corner_button_new"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/action_continue"
-                android:layout_gravity="right"
+                android:background="@drawable/round_corner_button"
+                android:padding="5dp"
+                android:text="@string/create_event"
                 android:textColor="@color/clr_FF9800"
                 android:textSize="20sp" />
 

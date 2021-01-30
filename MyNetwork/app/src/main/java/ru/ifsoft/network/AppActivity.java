@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +42,7 @@ public class AppActivity extends ActivityBase {
     Button loginBtn, signupBtn;
 
     ProgressBar progressBar;
+    private final int SPLASH_DISPLAY_LENGTH = 1500;
 
     private FusedLocationProviderClient mFusedLocationClient;
     protected Location mLastLocation;
@@ -204,8 +207,17 @@ public class AppActivity extends ActivityBase {
 
         progressBar.setVisibility(View.GONE);
 
-        loginBtn.setVisibility(View.VISIBLE);
-        signupBtn.setVisibility(View.VISIBLE);
+        loginBtn.setVisibility(View.GONE);
+        signupBtn.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                Intent i = new Intent(AppActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        }, SPLASH_DISPLAY_LENGTH);
     }
 
     public void showLoadingScreen() {

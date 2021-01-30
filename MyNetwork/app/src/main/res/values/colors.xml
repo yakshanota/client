@@ -126,4 +126,9 @@
     <color name="active_like">#C24537</color>
     <color name="clr_FF9800">#E7961F</color>
 
+
+    <color name="colorAccentlight">#8509f2</color>
+    <color name="red">#e60000</color>
+    <color name="whiteoff">#606060</color>
+
 </resources>

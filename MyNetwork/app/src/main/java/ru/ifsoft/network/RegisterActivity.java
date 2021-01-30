@@ -3,6 +3,7 @@ package ru.ifsoft.network;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,6 +49,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -79,6 +81,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.RequestBody;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -87,17 +90,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import ru.ifsoft.network.adapter.CustomListAdapterDialog;
+import ru.ifsoft.network.adapter.CustomListAdapterDialogActivity;
 import ru.ifsoft.network.app.App;
 import ru.ifsoft.network.common.ActivityBase;
+import ru.ifsoft.network.model.MelaList;
 import ru.ifsoft.network.util.CustomRequest;
 import ru.ifsoft.network.util.Helper;
 
-public class RegisterActivity extends ActivityBase {
+public class RegisterActivity extends ActivityBase implements CustomListAdapterDialogActivity.PositionClickListener {
 
     public static final int SELECT_PHOTO_IMG = 20;
     public static final int CREATE_PHOTO_IMG = 21;
@@ -160,6 +167,11 @@ public class RegisterActivity extends ActivityBase {
 
     private Boolean img_status = false;
 
+    private ArrayList<MelaList> itemsList;
+    private int arrayLength = 0;
+    private Dialog dialog;
+    TextView txt_emela;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -215,7 +227,7 @@ public class RegisterActivity extends ActivityBase {
                 R.layout.register_screen_3,
                 R.layout.register_screen_2};
 
-       addMarkers(0);
+        addMarkers(0);
 
         myViewPagerAdapter = new MyViewPagerAdapter();
         mViewPager.setAdapter(myViewPagerAdapter);
@@ -818,6 +830,8 @@ public class RegisterActivity extends ActivityBase {
     };
 
 
+
+
     public class MyViewPagerAdapter extends PagerAdapter {
 
         private LayoutInflater layoutInflater;
@@ -999,24 +1013,28 @@ public class RegisterActivity extends ActivityBase {
                     mButtonBack.setTextColor(getResources().getColor(R.color.black));
                     mButtonFinish.setTextColor(getResources().getColor(R.color.black));
                     RadioGroup rad = view.findViewById(R.id.rg5);
+                    txt_emela = view.findViewById(R.id.event_mela);
                     Button button_choose_group = view.findViewById(R.id.button_choose_group);
                     button_choose_group.setVisibility(View.GONE);
+                    txt_emela.setVisibility(View.GONE);
                     rad.setOnCheckedChangeListener((group, checkedId) -> {
                         int id = rad.getCheckedRadioButtonId();
                         View radioButton = rad.findViewById(id);
                         if (radioButton.getId() == R.id.rg5r1) {
                             button_choose_group.setVisibility(View.GONE);
+                            txt_emela.setVisibility(View.GONE);
                             gender = 0;
                         } else {
+                            txt_emela.setVisibility(View.VISIBLE);
                             button_choose_group.setVisibility(View.GONE);
                             gender = 1;
                         }
                     });
 
-                    button_choose_group.setOnClickListener(new View.OnClickListener() {
+                    txt_emela.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            choiceAge();
+                            getItemsEventMela();
                         }
                     });
 
@@ -1418,6 +1436,60 @@ public class RegisterActivity extends ActivityBase {
         }
     }
 
+    /*  private void go() {
+          showpDialog();
+          CustomRequest jsonReq = new CustomRequest(Request.Method.POST, METHOD_SIGNUP_OTP, null,
+                  new Response.Listener<JSONObject>() {
+                      @Override
+                      public void onResponse(JSONObject response) {
+
+                          try {
+                              if (!response.getBoolean("error")) {
+                                  Intent intent = new Intent(RegisterActivity.this, OtpVerifyActivity.class);
+                                  intent.putExtra("phoneNo",username);
+                                  startActivity(intent);
+
+                              } else {
+                                  Toast.makeText(RegisterActivity.this, getString(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
+                              }
+                          } catch (JSONException e) {
+                              e.printStackTrace();
+                          }
+
+
+                          hidepDialog();
+                      }
+                  }, new Response.ErrorListener() {
+              @Override
+              public void onErrorResponse(VolleyError error) {
+
+                  Toast.makeText(RegisterActivity.this, getText(R.string.error_data_loading), Toast.LENGTH_LONG).show();
+
+                  hidepDialog();
+              }
+          }) {
+
+              @Override
+              protected Map<String, String> getParams() {
+                  String artist_status = "No";
+                  if(gender == 0){
+                     artist_status = "No";
+                  } else  {
+                      artist_status = "Yes";
+                  }
+                  Map<String, String> params = new HashMap<String, String>();
+                  params.put("fullname", fullname);
+                  params.put("phone",username);
+                  params.put("artist",artist_status);
+                  params.put("mela","");
+                  return params;
+              }
+          };
+
+          App.getInstance().addToRequestQueue(jsonReq);
+
+      }
+  */
     private void go() {
 
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
@@ -1771,5 +1843,75 @@ public class RegisterActivity extends ActivityBase {
         jsonReq.setRetryPolicy(policy);
 
         App.getInstance().addToRequestQueue(jsonReq);
+    }
+
+    public void getItemsEventMela() {
+        CustomRequest jsonReq = new CustomRequest(Request.Method.GET, METHOD_EVENTS_MELA_LIST, null,
+                response -> {
+
+                    itemsList = new ArrayList<>();
+                    try {
+                        if (!response.getBoolean("error")) {
+                            JSONArray array = response.getJSONArray("data");
+                            arrayLength = array.length();
+                            if (arrayLength > 0) {
+
+                                for (int i = 0; i < array.length(); i++) {
+
+                                    JSONObject userObj = array.getJSONObject(i);
+
+                                    MelaList community = new MelaList(userObj);
+
+                                    itemsList.add(community);
+                                }
+                            }
+
+                        }
+                        showEventDialog(itemsList);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } finally {
+                        // loadingComplete();
+
+                    }
+
+                }, error -> {
+
+            //loadingComplete();
+            Toast.makeText(RegisterActivity.this, getString(R.string.error_data_loading), Toast.LENGTH_LONG).show();
+        }) {
+
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+
+        App.getInstance().addToRequestQueue(jsonReq);
+    }
+
+    private void showEventDialog(ArrayList<MelaList> list) {
+
+        dialog = new Dialog(RegisterActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.item_row, null);
+
+        ListView lv = (ListView) view.findViewById(R.id.listView);
+
+        // Change MyActivity.this and myListOfItems to your own values
+        CustomListAdapterDialogActivity clad = new CustomListAdapterDialogActivity(RegisterActivity.this, this, list);
+        lv.setAdapter(clad);
+        dialog.setContentView(view);
+        dialog.show();
+
+    }
+
+    @Override
+    public void itemClicked(int position) {
+        txt_emela.setText(itemsList.get(position).getFullname());
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 }

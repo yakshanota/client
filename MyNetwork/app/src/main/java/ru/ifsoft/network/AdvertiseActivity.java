@@ -1,18 +1,15 @@
 package ru.ifsoft.network;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-
 import ru.ifsoft.network.common.ActivityBase;
 
-public class LoginActivity extends ActivityBase {
+public class AdvertiseActivity extends ActivityBase {
 
     Toolbar mToolbar;
 
@@ -20,8 +17,9 @@ public class LoginActivity extends ActivityBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_upgrades);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -35,11 +33,13 @@ public class LoginActivity extends ActivityBase {
 
         } else {
 
-            fragment = new LoginFragment();
+            fragment = new AdvertiseFragment();
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container_body, fragment).commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container_body, fragment)
+                .commit();
     }
 
     @Override
@@ -59,36 +59,18 @@ public class LoginActivity extends ActivityBase {
     }
 
     @Override
-    public void onPause() {
-
-        super.onPause();
-
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        View focusedView = getCurrentFocus();
-
-        if (focusedView != null) {
-
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
-
-    @Override
-    public void onBackPressed(){
-
-        finish();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         switch (item.getItemId()) {
 
             case android.R.id.home: {
 
-                finish();
+                AdvertiseFragment fragment = (AdvertiseFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.container_body);
+                super.onBackPressed();
                 return true;
             }
 
@@ -98,4 +80,13 @@ public class LoginActivity extends ActivityBase {
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // your code.
+        AdvertiseFragment fragment = (AdvertiseFragment)
+                getSupportFragmentManager().findFragmentById(R.id.container_body);
+        super.onBackPressed();
+    }
 }
+

@@ -1,7 +1,9 @@
 package ru.ifsoft.network;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -130,9 +134,10 @@ public class VideoListFragment extends Fragment implements Constants, SwipeRefre
         mRecyclerView.setAdapter(itemsAdapter);
 
         itemsAdapter.setOnItemClickListener((view, item, position) -> {
-            Intent i = new Intent(getActivity(), VideoViewActivity.class);
-            i.putExtra("videoUrl", item.getVideoUrl());
-            startActivity(i);
+            if (item.getVideoUrl().length() != 0) {
+                watchYoutubeVideo(item.getVideoUrl());
+
+            }
         });
 
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -187,6 +192,41 @@ public class VideoListFragment extends Fragment implements Constants, SwipeRefre
         // Inflate the layout for this fragment
         return rootView;
     }
+
+    public void watchYoutubeVideo(String id) {
+
+        final String regex = "v=([^\\s&#]*)";
+        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        final Matcher matcher = pattern.matcher(id);
+        String new_id = "";
+        if (matcher.find()) {
+            new_id = matcher.group(1);
+        }
+
+        if (new_id.length() > 0) {
+
+            if (YOUTUBE_API_KEY.length() > 5) {
+
+                Intent i = new Intent(getActivity(), ViewYouTubeVideoActivity.class);
+                i.putExtra("videoCode", new_id);
+                startActivity(i);
+
+            } else {
+
+                try {
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + new_id));
+                    startActivity(intent);
+
+                } catch (ActivityNotFoundException ex) {
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + new_id));
+                    startActivity(intent);
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onRefresh() {

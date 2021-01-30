@@ -1,5 +1,6 @@
 package ru.ifsoft.network;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +18,9 @@ import android.widget.ImageView;
 import com.android.volley.toolbox.ImageLoader;
 import com.balysv.materialripple.MaterialRippleLayout;
 
+import androidx.fragment.app.Fragment;
 import ru.ifsoft.network.app.App;
 import ru.ifsoft.network.constants.Constants;
-import ru.ifsoft.network.view.ComingSoonActivity;
 
 
 public class MenuFragment extends Fragment implements Constants {
@@ -28,11 +29,11 @@ public class MenuFragment extends Fragment implements Constants {
 
     private ImageView mFriendsIcon, mGuestsIcon;
 
-    private ImageView mNavGalleryIcon, mNavGroupsIcon, mNavFriendsIcon, mNavGuestsIcon, mNavMarketIcon, mNavNearbyIcon, mNavFavoritesIcon, mNavStreamIcon, mNavPopularIcon, mNavUpgradesIcon, mNavSettingsIcon;
+    private ImageView mNavGalleryIcon, mNavGroupsIcon, mNavFriendsIcon, mNavGuestsIcon, mNavMarketIcon, mNavNearbyIcon, mNavFavoritesIcon, mNavStreamIcon, mNavPopularIcon, mNavUpgradesIcon, mNavSettingsIcon,mNavEventIcon;
 
     private MaterialRippleLayout mNavGallery, mNavGroups, mNavStream, mNavFriends, mNavMarket, mNavGuests, mNavFavorites, mNavNearby, mNavPopular, mNavAds, mNavSettings;
 
-    private MaterialRippleLayout mnav_artist,mnav_video,mnav_support,mnav_profile;
+    private MaterialRippleLayout mnav_artist,mnav_video,mnav_support,mnav_profile,mNavEvent;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -48,6 +49,7 @@ public class MenuFragment extends Fragment implements Constants {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -55,42 +57,44 @@ public class MenuFragment extends Fragment implements Constants {
 
         getActivity().setTitle(R.string.nav_menu);
 
-        mNavGallery = (MaterialRippleLayout) rootView.findViewById(R.id.nav_gallery);
-        mNavGroups = (MaterialRippleLayout) rootView.findViewById(R.id.nav_groups);
-        mNavFriends = (MaterialRippleLayout) rootView.findViewById(R.id.nav_friends);
-        mNavGuests = (MaterialRippleLayout) rootView.findViewById(R.id.nav_guests);
-        mNavMarket = (MaterialRippleLayout) rootView.findViewById(R.id.nav_market);
-        mNavNearby = (MaterialRippleLayout) rootView.findViewById(R.id.nav_nearby);
-        mNavFavorites = (MaterialRippleLayout) rootView.findViewById(R.id.nav_favorites);
-        mNavStream = (MaterialRippleLayout) rootView.findViewById(R.id.nav_stream);
-        mNavPopular = (MaterialRippleLayout) rootView.findViewById(R.id.nav_popular);
-        mNavAds = (MaterialRippleLayout) rootView.findViewById(R.id.nav_ads);
-        mNavSettings = (MaterialRippleLayout) rootView.findViewById(R.id.nav_settings);
+        mNavGallery = rootView.findViewById(R.id.nav_gallery);
+        mNavGroups = rootView.findViewById(R.id.nav_groups);
+        mNavFriends = rootView.findViewById(R.id.nav_friends);
+        mNavGuests = rootView.findViewById(R.id.nav_guests);
+        mNavMarket = rootView.findViewById(R.id.nav_market);
+        mNavNearby = rootView.findViewById(R.id.nav_nearby);
+        mNavFavorites = rootView.findViewById(R.id.nav_favorites);
+        mNavStream = rootView.findViewById(R.id.nav_stream);
+        mNavPopular = rootView.findViewById(R.id.nav_popular);
+        mNavAds = rootView.findViewById(R.id.nav_ads);
+        mNavSettings = rootView.findViewById(R.id.nav_settings);
+        mNavEvent = rootView.findViewById(R.id.nav_event);
 
-        mnav_artist = (MaterialRippleLayout) rootView.findViewById(R.id.nav_artist);
-        mnav_video = (MaterialRippleLayout) rootView.findViewById(R.id.nav_video);
-        mnav_support = (MaterialRippleLayout) rootView.findViewById(R.id.nav_support);
-        mnav_profile = (MaterialRippleLayout) rootView.findViewById(R.id.nav_profile);
+        mnav_artist = rootView.findViewById(R.id.nav_artist);
+        mnav_video = rootView.findViewById(R.id.nav_video);
+        mnav_support = rootView.findViewById(R.id.nav_support);
+        mnav_profile = rootView.findViewById(R.id.nav_profile);
 
 
         // Counters
 
-        mFriendsIcon = (ImageView) rootView.findViewById(R.id.nav_friends_count_icon);
-        mGuestsIcon = (ImageView) rootView.findViewById(R.id.nav_guests_count_icon);
+        mFriendsIcon = rootView.findViewById(R.id.nav_friends_count_icon);
+        mGuestsIcon = rootView.findViewById(R.id.nav_guests_count_icon);
 
         // Icons
 
-        mNavGalleryIcon = (ImageView) rootView.findViewById(R.id.nav_gallery_icon);
-        mNavGroupsIcon = (ImageView) rootView.findViewById(R.id.nav_groups_icon);
-        mNavFriendsIcon = (ImageView) rootView.findViewById(R.id.nav_friends_icon);
-        mNavGuestsIcon = (ImageView) rootView.findViewById(R.id.nav_guests_icon);
-        mNavMarketIcon = (ImageView) rootView.findViewById(R.id.nav_market_icon);
-        mNavNearbyIcon = (ImageView) rootView.findViewById(R.id.nav_nearby_icon);
-        mNavFavoritesIcon = (ImageView) rootView.findViewById(R.id.nav_favorites_icon);
-        mNavStreamIcon = (ImageView) rootView.findViewById(R.id.nav_stream_icon);
-        mNavPopularIcon = (ImageView) rootView.findViewById(R.id.nav_popular_icon);
-        mNavUpgradesIcon = (ImageView) rootView.findViewById(R.id.nav_ads_icon);
-        mNavSettingsIcon = (ImageView) rootView.findViewById(R.id.nav_settings_icon);
+        mNavGalleryIcon = rootView.findViewById(R.id.nav_gallery_icon);
+        mNavGroupsIcon = rootView.findViewById(R.id.nav_groups_icon);
+        mNavFriendsIcon = rootView.findViewById(R.id.nav_friends_icon);
+        mNavGuestsIcon = rootView.findViewById(R.id.nav_guests_icon);
+        mNavMarketIcon = rootView.findViewById(R.id.nav_market_icon);
+        mNavNearbyIcon = rootView.findViewById(R.id.nav_nearby_icon);
+        mNavFavoritesIcon = rootView.findViewById(R.id.nav_favorites_icon);
+        mNavStreamIcon = rootView.findViewById(R.id.nav_stream_icon);
+        mNavPopularIcon = rootView.findViewById(R.id.nav_popular_icon);
+        mNavUpgradesIcon = rootView.findViewById(R.id.nav_ads_icon);
+        mNavSettingsIcon = rootView.findViewById(R.id.nav_settings_icon);
+        mNavEventIcon = rootView.findViewById(R.id.nav_events_icon);
 
         if (!MARKETPLACE_FEATURE) {
 
@@ -98,311 +102,223 @@ public class MenuFragment extends Fragment implements Constants {
         }
 
 
-        mNavGallery.setOnTouchListener(new View.OnTouchListener() {
+        mNavGallery.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavGalleryIcon);
-                }
-
-                return false;
+                animateIcon(mNavGalleryIcon);
             }
+
+            return false;
         });
 
-        mNavGallery.setOnClickListener(new View.OnClickListener() {
+        mNavGallery.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), GalleryActivity.class);
-                i.putExtra("profileId", App.getInstance().getId());
-                getActivity().startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), GalleryActivity.class);
+            i.putExtra("profileId", App.getInstance().getId());
+            getActivity().startActivity(i);
         });
 
-        mNavGroups.setOnTouchListener(new View.OnTouchListener() {
+        mNavGroups.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavGroupsIcon);
-                }
-
-                return false;
+                animateIcon(mNavGroupsIcon);
             }
+
+            return false;
         });
 
-        mNavGroups.setOnClickListener(new View.OnClickListener() {
+        mNavGroups.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), GroupsActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), GroupsActivity.class);
+            startActivity(i);
         });
 
-        mNavFriends.setOnTouchListener(new View.OnTouchListener() {
+        mNavFriends.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavFriendsIcon);
-                }
-
-                return false;
+                animateIcon(mNavFriendsIcon);
             }
+
+            return false;
         });
 
-        mNavFriends.setOnClickListener(new View.OnClickListener() {
+        mNavFriends.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), FriendsActivity.class);
-                i.putExtra("profileId", App.getInstance().getId());
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), FriendsActivity.class);
+            i.putExtra("profileId", App.getInstance().getId());
+            startActivity(i);
         });
 
-        mNavGuests.setOnTouchListener(new View.OnTouchListener() {
+        mNavGuests.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavGuestsIcon);
-                }
-
-                return false;
+                animateIcon(mNavGuestsIcon);
             }
+
+            return false;
         });
 
-        mNavGuests.setOnClickListener(new View.OnClickListener() {
+        mNavGuests.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), GuestsActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), GuestsActivity.class);
+            startActivity(i);
         });
 
-        mNavMarket.setOnTouchListener(new View.OnTouchListener() {
+        mNavMarket.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavMarketIcon);
-                }
-
-                return false;
+                animateIcon(mNavMarketIcon);
             }
+
+            return false;
         });
 
-        mNavMarket.setOnClickListener(new View.OnClickListener() {
+        mNavMarket.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), MarketActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), MarketActivity.class);
+            startActivity(i);
         });
 
-        mNavNearby.setOnTouchListener(new View.OnTouchListener() {
+        mNavNearby.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavNearbyIcon);
-                }
-
-                return false;
+                animateIcon(mNavNearbyIcon);
             }
+
+            return false;
         });
 
-        mNavNearby.setOnClickListener(new View.OnClickListener() {
+        mNavNearby.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), NearbyActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), NearbyActivity.class);
+            startActivity(i);
         });
 
-        mNavFavorites.setOnTouchListener(new View.OnTouchListener() {
+        mNavFavorites.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavFavoritesIcon);
-                }
-
-                return false;
+                animateIcon(mNavFavoritesIcon);
             }
+
+            return false;
         });
 
-        mNavFavorites.setOnClickListener(new View.OnClickListener() {
+        mNavFavorites.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), FavoritesActivity.class);
-                i.putExtra("profileId", App.getInstance().getId());
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), FavoritesActivity.class);
+            i.putExtra("profileId", App.getInstance().getId());
+            startActivity(i);
         });
 
-        mNavStream.setOnTouchListener(new View.OnTouchListener() {
+        mNavStream.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavStreamIcon);
-                }
-
-                return false;
+                animateIcon(mNavStreamIcon);
             }
+
+            return false;
         });
 
-        mNavStream.setOnClickListener(new View.OnClickListener() {
+        mNavStream.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), StreamActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), StreamActivity.class);
+            startActivity(i);
         });
 
-        mNavPopular.setOnTouchListener(new View.OnTouchListener() {
+        mNavPopular.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavPopularIcon);
-                }
-
-                return false;
+                animateIcon(mNavPopularIcon);
             }
+
+            return false;
         });
 
-        mNavPopular.setOnClickListener(new View.OnClickListener() {
+        mNavPopular.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), PopularActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), PopularActivity.class);
+            startActivity(i);
         });
 
-        mNavAds.setOnTouchListener(new View.OnTouchListener() {
+        mNavAds.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavUpgradesIcon);
-                }
-
-                return false;
+                animateIcon(mNavUpgradesIcon);
             }
+
+            return false;
         });
 
-        mNavAds.setOnClickListener(new View.OnClickListener() {
+        mNavAds.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), UpgradesActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), AdvertiseActivity.class);
+            startActivity(i);
         });
 
-        mNavSettings.setOnTouchListener(new View.OnTouchListener() {
+        mNavSettings.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    animateIcon(mNavSettingsIcon);
-                }
-
-                return false;
+                animateIcon(mNavSettingsIcon);
             }
+
+            return false;
         });
 
-        mNavSettings.setOnClickListener(new View.OnClickListener() {
+        mNavEvent.setOnTouchListener((view, motionEvent) -> {
 
-            @Override
-            public void onClick(View view) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 
-                Intent i = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(i);
+                animateIcon(mNavEventIcon);
             }
+
+            return false;
         });
 
-        mnav_artist.setOnClickListener(new View.OnClickListener() {
+        mNavEvent.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), ArtistListActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), EventActivity.class);
+            startActivity(i);
         });
 
-        mnav_video.setOnClickListener(new View.OnClickListener() {
+        mNavSettings.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), VideoListActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(i);
         });
 
-        mnav_support.setOnClickListener(new View.OnClickListener() {
+        mnav_artist.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(getActivity(), SupportActivity.class);
-                startActivity(i);
-            }
+            Intent i = new Intent(getActivity(), ArtistListActivity.class);
+            startActivity(i);
         });
 
-        mnav_profile.setOnClickListener(new View.OnClickListener() {
+        mnav_video.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
+            Intent i = new Intent(getActivity(), VideoListActivity.class);
+            startActivity(i);
+        });
 
-                Intent i = new Intent(getActivity(), ProfileActivity.class);
-                startActivity(i);
-            }
+        mnav_support.setOnClickListener(view -> {
+
+            Intent i = new Intent(getActivity(), SupportActivity.class);
+            startActivity(i);
+        });
+
+        mnav_profile.setOnClickListener(view -> {
+
+            Intent i = new Intent(getActivity(), ProfileActivity.class);
+            startActivity(i);
         });
 
 

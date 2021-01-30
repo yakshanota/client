@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,8 +48,8 @@ public class LoginFragment extends Fragment implements Constants {
 
     private ProgressDialog pDialog;
 
-    TextView mForgotPassword;
-    Button signinBtn;
+    TextView mForgotPassword,btn_signup,otpLogin;
+    ImageView signinBtn;
     EditText signinUsername, signinPassword;
     String username, password, facebook_id = "", fullname = "", email = "";
 
@@ -82,6 +84,8 @@ public class LoginFragment extends Fragment implements Constants {
         }
 
         loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
+        btn_signup = (TextView) rootView.findViewById(R.id.btn_signup) ;
+        otpLogin = (TextView) rootView.findViewById(R.id.otpLogin);
         loginButton.setPermissions("public_profile");
 
         loginButton.setVisibility(View.GONE);
@@ -128,7 +132,17 @@ public class LoginFragment extends Fragment implements Constants {
             }
         });
 
-        signinBtn = (Button) rootView.findViewById(R.id.signinBtn);
+        otpLogin.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(getActivity(), SendOTPActivity.class);
+                startActivity(i);
+            }
+        });
+
+        signinBtn = (ImageView) rootView.findViewById(R.id.signinBtn);
 
         signinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +164,14 @@ public class LoginFragment extends Fragment implements Constants {
             }
         });
 
+        btn_signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(getActivity(), RegisterActivity.class);
+                startActivity(i);
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;
@@ -266,6 +288,7 @@ public class LoginFragment extends Fragment implements Constants {
                             if (App.getInstance().getState() == ACCOUNT_STATE_ENABLED) {
 
                                 App.getInstance().updateGeoLocation();
+                               // sendOTP(email);
 
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -281,6 +304,8 @@ public class LoginFragment extends Fragment implements Constants {
                                 } else {
 
                                     App.getInstance().updateGeoLocation();
+
+                                   // sendOTP(email);
 
                                     Intent intent = new Intent(getActivity(), MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -337,6 +362,7 @@ public class LoginFragment extends Fragment implements Constants {
 
     public void signin() {
 
+
         loading = true;
 
         showpDialog();
@@ -353,6 +379,8 @@ public class LoginFragment extends Fragment implements Constants {
 
                                 App.getInstance().updateGeoLocation();
 
+                                //sendOTP(username);
+
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
@@ -367,6 +395,7 @@ public class LoginFragment extends Fragment implements Constants {
                                 } else {
 
                                     App.getInstance().updateGeoLocation();
+                                    //sendOTP(username);
 
                                     Intent intent = new Intent(getActivity(), MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -410,6 +439,7 @@ public class LoginFragment extends Fragment implements Constants {
 
         App.getInstance().addToRequestQueue(jsonReq);
     }
+
 
     public Boolean checkUsername() {
 

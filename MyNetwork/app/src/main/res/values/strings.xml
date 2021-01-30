@@ -912,5 +912,21 @@
     <string name="str_in_active_artist">In Active Artist</string>
     <string name="profile">Profile</string>
     <string name="advertise">Advertise</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="please_type_the_verification_code_sent_to_n_9xxxxxxx19">Please type the verification code sent to\n</string>
+    <string name="title_activity_otpVerify">OTP Verify</string>
+    <string name="str_verify">Verify</string>
+    <string name="str_otp">OTP</string>
+    <string name="create_account">CREATE ACCOUNT ?</string>
+    <string name="str_sendotp">Send OTP</string>
+    <string name="create_event">Create Event</string>
+    <string name="event_name_place_holder">Event Name</string>
+    <string name="event_place_placeholder">Event Place</string>
+    <string name="event_description">Event Description</string>
+    <string name="select_event_mela_placeholder">Select Event Mela</string>
+    <string name="select_event_image_palceholder">Select Event Image</string>
+    <string name="select_event_date">Select Event Date</string>
+    <string name="event_sucess">Event Added Sucessfully</string>
+    <string name="str_event_details">Details</string>
 
 </resources>

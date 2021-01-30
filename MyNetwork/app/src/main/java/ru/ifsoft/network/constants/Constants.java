@@ -70,7 +70,7 @@ public interface Constants {
     public static final String METHOD_ACCOUNT_AUTHORIZE = API_DOMAIN + "api/" + API_VERSION + "/method/account.authorize" + API_FILE_EXTENSION;
     public static final String METHOD_ACCOUNT_SET_GCM_TOKEN = API_DOMAIN + "api/" + API_VERSION + "/method/account.setGcmToken" + API_FILE_EXTENSION;
     public static final String METHOD_ACCOUNT_LOGINBYFACEBOOK = API_DOMAIN + "api/" + API_VERSION + "/method/account.signInByFacebook" + API_FILE_EXTENSION;
-    public static final String METHOD_ACCOUNT_RECOVERY = API_DOMAIN + "api/" + API_VERSION + "/method/account.recovery.inc" + API_FILE_EXTENSION;
+    public static final String METHOD_ACCOUNT_RECOVERY = API_DOMAIN + "api/" + API_VERSION + "/method/account.recovery" + API_FILE_EXTENSION;
     public static final String METHOD_ACCOUNT_SETPASSWORD = API_DOMAIN + "api/" + API_VERSION + "/method/account.setPassword" + API_FILE_EXTENSION;
     public static final String METHOD_ACCOUNT_DEACTIVATE = API_DOMAIN + "api/" + API_VERSION + "/method/account.deactivate" + API_FILE_EXTENSION;
     public static final String METHOD_ACCOUNT_SAVE_SETTINGS = API_DOMAIN + "api/" + API_VERSION + "/method/account.saveSettings" + API_FILE_EXTENSION;
@@ -210,6 +210,15 @@ public interface Constants {
     public static final String METHOD_ACTIVE_ARTIST_SEARCH = API_DOMAIN + "api/" + API_VERSION + "/method/artistsearch.get" + API_FILE_EXTENSION;
     public static final String METHOD_VIDEO_LIST = API_DOMAIN + "api/" + API_VERSION + "/method/allvideolist.get" + API_FILE_EXTENSION;
     public static final String METHOD_VIDEO_SEARCH = API_DOMAIN + "api/" + API_VERSION + "/method/allvideolistsearch.get" + API_FILE_EXTENSION;
+
+    public static final String METHOD_SIGNIN_OTP = API_DOMAIN + "api/" + API_VERSION + "/method/account.signInOtp" + API_FILE_EXTENSION;
+    public static final String METHOD_SIGNIN_OTP_CHECK = API_DOMAIN + "api/" + API_VERSION + "/method/account.signInOtpCheck" + API_FILE_EXTENSION;
+    public static final String METHOD_SIGNUP_OTP = API_DOMAIN + "api/" + API_VERSION + "/method/account.signUpOtp" + API_FILE_EXTENSION;
+    public static final String METHOD_ADDS_LIST = API_DOMAIN + "api/" + API_VERSION + "/method/listAdds" + API_FILE_EXTENSION;
+    public static final String METHOD_EVENTS_LIST = API_DOMAIN + "api/" + API_VERSION + "/method/listEvents" + API_FILE_EXTENSION;
+    public static final String METHOD_EVENTS_MELA_LIST = API_DOMAIN + "api/" + API_VERSION + "/method/listMela" + API_FILE_EXTENSION;
+    public static final String METHOD_EVENTS_CREATE = API_DOMAIN + "api/" + API_VERSION + "/method/save.events" + API_FILE_EXTENSION;
+
 
     public static final String METHOD_INACTIVE_ARTIST = API_DOMAIN + "m/parichaya/parichaya.html" ;
     public static final String METHOD_SUPPORT_ARTIST = API_DOMAIN + "m/help/help.html" ;

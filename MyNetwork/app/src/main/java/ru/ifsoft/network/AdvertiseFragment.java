@@ -1,12 +1,8 @@
 package ru.ifsoft.network;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,8 +24,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -38,16 +31,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import ru.ifsoft.network.adapter.ArtistListAdapter;
-import ru.ifsoft.network.adapter.VideoListAdapter;
+import ru.ifsoft.network.adapter.AddsListAdapter;
 import ru.ifsoft.network.app.App;
 import ru.ifsoft.network.constants.Constants;
-import ru.ifsoft.network.model.Artist;
-import ru.ifsoft.network.model.NewVideo;
-import ru.ifsoft.network.util.CustomRequestNew;
+import ru.ifsoft.network.model.Adds;
+import ru.ifsoft.network.util.CustomRequest;
 import ru.ifsoft.network.view.LineItemDecoration;
 
-public class MainVideoListFragment extends Fragment implements Constants, SwipeRefreshLayout.OnRefreshListener {
+public class AdvertiseFragment extends Fragment implements Constants, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String STATE_LIST = "State Adapter Data";
 
@@ -59,8 +50,8 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
 
     private SwipeRefreshLayout mItemsContainer;
 
-    private ArrayList<NewVideo> itemsList;
-    private VideoListAdapter itemsAdapter;
+    private ArrayList<Adds> itemsList;
+    private AddsListAdapter itemsAdapter;
 
     private int itemId = 0;
     private int arrayLength = 0;
@@ -71,48 +62,36 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
     private EditText searchView;
     public String queryText = "";
 
-    public MainVideoListFragment() {
+    public AdvertiseFragment() {
         // Required empty public constructor
-    }
-
-    public MainVideoListFragment newInstance(Boolean pager) {
-
-        MainVideoListFragment myFragment = new MainVideoListFragment();
-
-        Bundle args = new Bundle();
-        args.putBoolean("pager", pager);
-        myFragment.setArguments(args);
-
-        return myFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
-
         setHasOptionsMenu(false);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_groups_search, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_adds, container, false);
 
         if (savedInstanceState != null) {
 
             itemsList = savedInstanceState.getParcelableArrayList(STATE_LIST);
-            itemsAdapter = new VideoListAdapter(getActivity(), itemsList);
+            itemsAdapter = new AddsListAdapter(getActivity(), itemsList);
 
             restore = savedInstanceState.getBoolean("restore");
             itemId = savedInstanceState.getInt("itemId");
 
         } else {
 
-            itemsList = new ArrayList<NewVideo>();
-            itemsAdapter = new VideoListAdapter(getActivity(), itemsList);
+            itemsList = new ArrayList<Adds>();
+            itemsAdapter = new AddsListAdapter(getActivity(), itemsList);
 
             restore = false;
             itemId = 0;
@@ -137,25 +116,10 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addItemDecoration(new LineItemDecoration(getActivity(), LinearLayout.VERTICAL));
+     //   mRecyclerView.addItemDecoration(new LineItemDecoration(getActivity(), LinearLayout.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mRecyclerView.setAdapter(itemsAdapter);
-
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "kkkkkkkk", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        itemsAdapter.setOnItemClickListener((view, item, position) -> {
-            if (item.getVideoUrl().length() != 0) {
-                watchYoutubeVideo(item.getVideoUrl());
-
-            }
-
-        });
 
 
         searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -170,7 +134,7 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
                     queryText = searchView.getText().toString().trim();
                     if (queryText.length() > 0) {
 
-                        searchStart();
+                        //searchStart();
 
                     }
 
@@ -256,40 +220,6 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
         return rootView;
     }
 
-    public void watchYoutubeVideo(String id) {
-
-        final String regex = "v=([^\\s&#]*)";
-        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        final Matcher matcher = pattern.matcher(id);
-        String new_id = "";
-        if (matcher.find()) {
-            new_id = matcher.group(1);
-        }
-
-        if (new_id.length() > 0) {
-
-            if (YOUTUBE_API_KEY.length() > 5) {
-
-                Intent i = new Intent(getActivity(), ViewYouTubeVideoActivity.class);
-                i.putExtra("videoCode", new_id);
-                startActivity(i);
-
-            } else {
-
-                try {
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + new_id));
-                    startActivity(intent);
-
-                } catch (ActivityNotFoundException ex) {
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + new_id));
-                    startActivity(intent);
-                }
-            }
-        }
-    }
-
     @Override
     public void onRefresh() {
 
@@ -356,88 +286,11 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
         mSplash.setVisibility(View.GONE);
     }
 
-    public void searchStart() {
-
-        if (App.getInstance().isConnected()) {
-
-            itemId = 0;
-            search();
-
-        } else {
-
-            Toast.makeText(getActivity(), getText(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void search() {
-
-        mItemsContainer.setRefreshing(true);
-
-        CustomRequestNew jsonReq = new CustomRequestNew(Request.Method.POST, METHOD_VIDEO_SEARCH, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-
-                        try {
-
-                            if (!loadingMore) {
-
-                                itemsList.clear();
-                            }
-
-                            arrayLength = 0;
-
-                            arrayLength = response.length();
-
-                            if (arrayLength > 0) {
-
-                                for (int i = 0; i < response.length(); i++) {
-
-                                    JSONObject profileObj = response.getJSONObject(i);
-
-                                    NewVideo group = new NewVideo(profileObj);
-
-                                    itemsList.add(group);
-                                }
-                            }
-
-
-                        } catch (JSONException e) {
-
-                            e.printStackTrace();
-
-                        } finally {
-
-                            loadingComplete();
-
-//
-                        }
-                    }
-                }, error -> {
-
-            loadingComplete();
-            Toast.makeText(getActivity(), getString(R.string.error_data_loading), Toast.LENGTH_LONG).show();
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("accountId", Long.toString(App.getInstance().getId()));
-                params.put("accessToken", App.getInstance().getAccessToken());
-                params.put("query", queryText);
-
-                return params;
-            }
-        };
-
-        App.getInstance().addToRequestQueue(jsonReq);
-    }
-
     public void getItems() {
 
         mItemsContainer.setRefreshing(true);
 
-        CustomRequestNew jsonReq = new CustomRequestNew(Request.Method.POST, METHOD_VIDEO_LIST, null,
+        CustomRequest jsonReq = new CustomRequest(Request.Method.GET, METHOD_ADDS_LIST, null,
                 response -> {
 
                     if (!loadingMore) {
@@ -446,18 +299,19 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
                     }
 
                     try {
+                        if (!response.getBoolean("error")) {
+                            JSONArray array = response.getJSONArray("data");
+                            arrayLength = array.length();
+                            if (arrayLength > 0) {
 
-                        arrayLength = response.length();
+                                for (int i = 0; i < array.length(); i++) {
 
-                        if (arrayLength > 0) {
+                                    JSONObject userObj = array.getJSONObject(i);
 
-                            for (int i = 0; i < response.length(); i++) {
+                                    Adds community = new Adds(userObj);
 
-                                JSONObject userObj = response.getJSONObject(i);
-
-                                NewVideo community = new NewVideo(userObj);
-
-                                itemsList.add(community);
+                                    itemsList.add(community);
+                                }
                             }
                         }
 
@@ -478,9 +332,6 @@ public class MainVideoListFragment extends Fragment implements Constants, SwipeR
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("accountId", Long.toString(App.getInstance().getId()));
-                params.put("accessToken", App.getInstance().getAccessToken());
-
                 return params;
             }
         };

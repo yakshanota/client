@@ -1,49 +1,40 @@
 package ru.ifsoft.network.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
+import ru.ifsoft.network.EventViewerActivity;
 import ru.ifsoft.network.R;
 import ru.ifsoft.network.constants.Constants;
-import ru.ifsoft.network.model.Artist;
-import ru.ifsoft.network.model.Chat;
-import ru.ifsoft.network.model.NewVideo;
+import ru.ifsoft.network.model.Adds;
 
-public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ViewHolder> implements Constants {
+public class AddsListAdapter extends RecyclerView.Adapter<AddsListAdapter.ViewHolder> implements Constants {
 
     private Context ctx;
-    private List<NewVideo> items;
-    private VideoListAdapter.OnItemClickListener mOnItemClickListener;
+    private List<Adds> items;
 
-    public interface OnItemClickListener {
-
-        void onItemClick(View view, NewVideo item, int position);
-    }
-
-    public void setOnItemClickListener(final VideoListAdapter.OnItemClickListener mItemClickListener) {
-
-        this.mOnItemClickListener = mItemClickListener;
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView username, txt_desc,txt_count;
-        public ImageView video_image,video_play_image;
+        public TextView username, txt_desc;
+        public ImageView video_image, itemLikeImg;
         public ProgressBar video_progress_bar;
-        public RelativeLayout video_layout;
+        MaterialRippleLayout btn_like;
+        RelativeLayout item_view;
 
         public ViewHolder(View view) {
 
@@ -51,16 +42,15 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
             username = (TextView) view.findViewById(R.id.username);
             txt_desc = (TextView) view.findViewById(R.id.txt_desc);
-            txt_count = (TextView) view.findViewById(R.id.txt_count);
             video_image = (ImageView) view.findViewById(R.id.video_image);
-            video_play_image = (ImageView) view.findViewById(R.id.video_play_image);
+            itemLikeImg = (ImageView) view.findViewById(R.id.itemLikeImg);
             video_progress_bar = (ProgressBar) view.findViewById(R.id.video_progress_bar);
-            video_layout = (RelativeLayout) view.findViewById(R.id.video_layout);
-
+            btn_like = (MaterialRippleLayout) view.findViewById(R.id.itemLikeButton);
+            item_view = (RelativeLayout) view.findViewById(R.id.item_view);
         }
     }
 
-    public VideoListAdapter(Context mContext, List<NewVideo> items) {
+    public AddsListAdapter(Context mContext, List<Adds> items) {
 
         this.ctx = mContext;
         this.items = items;
@@ -69,7 +59,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_video_list_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_adds_list_row, parent, false);
 
         return new ViewHolder(itemView);
     }
@@ -77,42 +67,50 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        final NewVideo item = items.get(position);
+        final Adds item = items.get(position);
 
         holder.username.setText(item.getName());
-        holder.txt_desc.setText(item.getDescription());
-        holder.txt_count.setText(item.getLikesCount());
+        holder.txt_desc.setText(item.getDesc());
+
 
         Picasso.with(ctx)
-                .load(item.getPreviewVideoImgUrl())
+                .load(item.getOriginImgUrl())
                 .into(holder.video_image, new Callback() {
 
                     @Override
                     public void onSuccess() {
 
                         holder.video_progress_bar.setVisibility(View.GONE);
-                        holder.video_play_image.setVisibility(View.VISIBLE);
+
                     }
 
                     @Override
                     public void onError() {
 
                         holder.video_progress_bar.setVisibility(View.GONE);
-                        holder.video_play_image.setVisibility(View.VISIBLE);
                         holder.video_image.setImageResource(R.drawable.img_loading_error);
                     }
                 });
+        if (item.getActive().equals("1")) {
+            holder.itemLikeImg.setImageResource(R.drawable.ic_like_active);
+        }
 
-        holder.video_layout.setOnClickListener(v -> {
-
-            if (mOnItemClickListener != null) {
-
-                mOnItemClickListener.onItemClick(v, items.get(position), position);
+        holder.item_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ctx, EventViewerActivity.class);
+                i.putExtra("EventName", item.getName());
+                i.putExtra("Desc",item.getDesc());
+                i.putExtra("EventMela", "");
+                i.putExtra("Date","");
+                i.putExtra("Image",item.getOriginImgUrl());
+                ctx.startActivity(i);
             }
         });
+
     }
 
-    public NewVideo getItem(int position) {
+    public Adds getItem(int position) {
 
         return items.get(position);
     }
@@ -123,8 +121,4 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         return items.size();
     }
 
-    public interface OnClickListener {
-
-        void onItemClick(View view, Chat item, int pos);
-    }
 }

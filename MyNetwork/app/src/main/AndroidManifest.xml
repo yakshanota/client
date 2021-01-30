@@ -348,6 +348,11 @@
             android:label="@string/artist_list" />
 
         <activity
+            android:name=".OtpVerifyActivity"
+            android:label="@string/title_activity_otpVerify"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
             android:name=".ActiveArtistSearchActivity"
             android:label="@string/title_activity_search">
             <meta-data
@@ -358,6 +363,31 @@
         <activity
             android:name=".VideoListActivity"
             android:label="@string/video_list"
+            android:theme="@style/MyMaterialTheme" />
+
+        <activity
+            android:name=".AdvertiseActivity"
+            android:label="@string/advertise"
+            android:theme="@style/MyMaterialTheme" />
+
+        <activity
+            android:name=".SendOTPActivity"
+            android:label="@string/str_sendotp"
+            android:theme="@style/MyMaterialTheme" />
+
+        <activity
+            android:name=".EventActivity"
+            android:label="@string/event_calender"
+            android:theme="@style/MyMaterialTheme" />
+
+        <activity
+            android:name=".CreateEvent"
+            android:label="@string/event_calender"
+            android:theme="@style/MyMaterialTheme" />
+
+        <activity
+            android:name=".EventViewerActivity"
+            android:label="@string/str_event_details"
             android:theme="@style/MyMaterialTheme" />
 
         <activity
